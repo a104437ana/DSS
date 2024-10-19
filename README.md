@@ -14,10 +14,14 @@ O sistema deverá suportar diferentes **algoritmos de priorização de alunos**,
 
 Para clonar este repositório e começar a trabalhar no projeto localmente, siga os seguintes passos:
 
-    Usando HTTP: 
-    ```bash
-    git clone https://github.com/LEI-DSS/DSS2425-Grupo-03.git
+### Usando HTTP: 
 
-    Usando SSH:
-    ```bash
-    git clone git@github.com:LEI-DSS/DSS2425-Grupo-03.git
+```bash
+git clone https://github.com/LEI-DSS/DSS2425-Grupo-03.git
+```
+
+### Usando SSH:
+
+```bash
+git clone git@github.com:LEI-DSS/DSS2425-Grupo-03.git
+```
