@@ -145,19 +145,12 @@ public class TextUI {
      */
     private void menuImport() {
         Menu menu = new Menu(new String[]{
-                "Importar Alunos"//,
-//                "Importar UC",
-//                "Importar Turnos",
-//                "Importar Salas",
-//                "Importar Grupos"
+                "Preencher Salas, UCs e Turnos",
+                "Importar Alunos e Inscrições"
         });
 
-        menu.setHandler(1, ()->this.model.importAlunos("src/csv/alunos.csv", "src/csv/inscritos.csv"));
-//        menu.setHandler(2, this::importarUC);
-//        menu.setHandler(3, this::importarTurnos);
-//        menu.setHandler(4, this::importarSalas);
-//        menu.setHandler(5, this::importarGrupos);
-//
+        menu.setHandler(1, ()->this.model.inicializacaoSalasUCsTurnos());
+        menu.setHandler(2, ()->this.model.importAlunos("src/csv/alunos.csv", "src/csv/inscritos.csv"));
 
         menu.run();
     }

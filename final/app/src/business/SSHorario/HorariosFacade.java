@@ -120,4 +120,12 @@ public class HorariosFacade implements IHorariosFacade {
         Aluno a = this.alunosDAO.get(codAluno);
         return a.getStringHorario();
     }
+
+    /**
+     * Método que preenche as tabelas das salas, ucs e turnos com dados pré-definidos.
+     */
+    public void inicializacaoSalasUCsTurnos() {
+        this.salasDAO.inserirSalasIniciais();
+        this.ucsDAO.inserirUcsETurnosIniciais();
+    }
 }

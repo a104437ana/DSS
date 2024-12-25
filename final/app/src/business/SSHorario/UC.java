@@ -80,18 +80,38 @@ public class UC {
     }
 
     // Métodos dos DAOs Associados
+    /**
+     * Método que devolve os turnos da UC.
+     *
+     * @return Lista de turnos da UC.
+     */
     public List<Turno> getTurnos() {
         return new ArrayList<>(this.turnoDAO.getByUC(this.cod));
     }
 
+    /**
+     * Método que adiciona uma única inscrição à UC.
+     *
+     * @param inscricao Inscrição a adicionar.
+     */
     public void adicionarInscricao(Inscricao inscricao) {
         this.inscritoDAO.put(this.cod, inscricao);
     }
 
+    /**
+     * Método que adiciona várias inscrições à UC.
+     *
+     * @param inscricoes Lista de inscrições a adicionar.
+     */
     public void adicionarInscricoes(List<Inscricao> inscricoes) {
         this.inscritoDAO.putAll(this.cod, inscricoes);
     }
 
+    /**
+     * Método que devolve as inscrições associadas à UC.
+     *
+     * @return Lista de inscrições da UC.
+     */
     public List<Inscricao> getInscricoes() {
         return this.inscritoDAO.getByUC(this.cod);
     }

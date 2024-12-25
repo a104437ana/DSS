@@ -101,10 +101,20 @@ public abstract class Turno implements Comparable<Turno> {
     }
 
     // Metodo dos DAOs
+    /**
+     * Método que devolve os alunos alocados no turno.
+     *
+     * @return Lista de alunos do turno.
+     */
     public List<Aluno> getAlunosTurno() {
         return new ArrayList<>(this.alunoDAO.getByTurno(this.cod));
     }
 
+    /**
+     * Método que devolve o número de alunos alocados num turno.
+     *
+     * @return Inteiro com a quantidade de alunos do turno
+     */
     public int qtdAlunos() {
         return this.alunoDAO.sizeByTurno(this.cod);
     }

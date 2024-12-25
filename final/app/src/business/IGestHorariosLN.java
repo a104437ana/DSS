@@ -26,4 +26,9 @@ public interface IGestHorariosLN {
      * @return String com id do utilizador autenticado ou null se credenciais estão inválidas
      */
     String login(String id, String senha);
+
+    /**
+     * Método que preenche as tabelas das salas, ucs e turnos com dados pré-definidos.
+     */
+    void inicializacaoSalasUCsTurnos();
 }
