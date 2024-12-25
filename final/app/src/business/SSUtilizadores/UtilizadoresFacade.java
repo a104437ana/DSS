@@ -1,10 +1,5 @@
 package business.SSUtilizadores;
 
-import business.SSHorario.Aluno;
-import business.SSHorario.AlunoEstatuto;
-import data.AlunoDAO;
-import data.SalaDAO;
-import data.UCDAO;
 import data.UtilizadorDAO;
 
 import java.io.BufferedReader;
@@ -17,7 +12,7 @@ public class UtilizadoresFacade implements IUtilizadoresFacade{
     private UtilizadorDAO utilizadoresDAO;
 
     public UtilizadoresFacade() {
-        this.utilizadoresDAO = utilizadoresDAO.getInstance();
+        this.utilizadoresDAO = UtilizadorDAO.getInstance();
     }
 
     /**
