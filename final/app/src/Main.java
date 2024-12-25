@@ -17,6 +17,4 @@ public class Main {
             System.out.println("Erro fatal: " + e.getMessage() + " [" + e.toString() + "]");
         }
     }
-
-
 }

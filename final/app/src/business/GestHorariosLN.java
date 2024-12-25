@@ -64,4 +64,11 @@ public class GestHorariosLN implements IGestHorariosLN{
     public String login(String id, String senha) {
         return this.utilizadores.login(id, senha);
     }
+
+    /**
+     * Método que preenche as tabelas das salas, ucs e turnos com dados pré-definidos.
+     */
+    public void inicializacaoSalasUCsTurnos() {
+        this.horarios.inicializacaoSalasUCsTurnos();
+    }
 }
