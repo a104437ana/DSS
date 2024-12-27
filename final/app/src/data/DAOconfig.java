@@ -12,3 +12,5 @@ public class DAOconfig {
     private static final String DRIVER = "jdbc:mysql";                  // Usar para MySQL
     static final String URL = DRIVER + "://localhost:3306/" + DATABASE;
 }
+
+// Erro do time zone: SET GLOBAL time_zone = '+00:00';
