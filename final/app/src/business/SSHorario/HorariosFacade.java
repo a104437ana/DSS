@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -70,6 +71,8 @@ public class HorariosFacade implements IHorariosFacade {
         try (BufferedReader br = new BufferedReader(new FileReader(ficheiroUCs))) {
             String linha;
 
+            br.readLine(); // Ignorar a linha de cabeçalho
+
             while ((linha = br.readLine()) != null) {
                 String[] atributos = linha.split(",");
 
@@ -81,6 +84,11 @@ public class HorariosFacade implements IHorariosFacade {
                 for (int i = 1; i < atributos.length; i += 2) {
                     String codAluno = atributos[i];
                     int nInscricao;
+
+                    if (i + 1 >= atributos.length) {
+                        System.err.println("Linha incompleta: " + Arrays.toString(atributos));
+                        continue;
+                    }
 
                     try {
                         nInscricao = Integer.parseInt(atributos[i + 1]); // Converter n_inscricao para int
@@ -97,7 +105,7 @@ public class HorariosFacade implements IHorariosFacade {
                 }
 
                 // Adicionar todas as inscrições para esta UC ao DAO
-                UC uc = this.ucsDAO.getInstance().get(codUC);
+                UC uc = this.ucsDAO.get(codUC);
                 if (uc != null) {
                     uc.adicionarInscricoes(inscricoes);
                 } else {

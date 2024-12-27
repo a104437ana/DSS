@@ -35,7 +35,7 @@ public class GestHorariosLN implements IGestHorariosLN{
 
             // Importar inscrições
             System.out.println("Importando inscrições...");
-            //this.horarios.importarInscricoesAlunos(ficheiroUCs);
+            this.horarios.importarInscricoesAlunos(ficheiroUCs);
             System.out.println("Inscrições importadas com sucesso.");
 
         } catch (RuntimeException e) {
