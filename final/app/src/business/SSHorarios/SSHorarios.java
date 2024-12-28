@@ -1,7 +1,6 @@
 package business.SSHorarios;
 
 import data.AlunoDAO;
-import data.InscritoDAO;
 import data.SalaDAO;
 import data.UCDAO;
 
@@ -106,7 +105,7 @@ public class SSHorarios implements ISSHorarios {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao ler o arquivo combinado: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao ler o ficheiro: " + e.getMessage(), e);
         }
 
         return alunoSenhaMap;
