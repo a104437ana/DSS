@@ -150,9 +150,17 @@ public class TextUI {
         });
 
         menu.setHandler(1, ()->this.model.inicializacaoSalasUCsTurnos());
-        menu.setHandler(2, ()->this.model.importarAlunos("src/csv/alunos.csv"));
+        menu.setHandler(2, this::importarAlunos);
 
         menu.run();
+    }
+
+    private void importarAlunos() {
+        System.out.println("Insira o caminho do ficheiro de alunos a importar: ");
+        System.out.println("Exemplo - src/csv/alunos.csv");
+        String caminho = scin.nextLine();
+
+        this.model.importarAlunos(caminho);
     }
 
     /**
