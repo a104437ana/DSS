@@ -1,6 +1,6 @@
 package data;
 
-import business.SSHorario.Sala;
+import business.SSHorarios.Sala;
 
 import java.sql.*;
 import java.util.*;

@@ -1,15 +1,15 @@
-package business.SSHorario;
+package business.SSHorarios;
 
 import java.time.LocalTime;
 
 /**
- * Classe que representa um turno teórico de uma unidade curricular.
+ * Classe que representa um turno teórico-prático de uma unidade curricular.
  */
-public class TurnoT extends Turno{
+public class TurnoTP extends Turno{
     /**
-     * Construtor para TurnoT.
+     * Construtor para TurnoTP.
      *
-     * @param cod         Código do turno
+     * @param idTurno         Código do turno
      * @param codUC
      * @param diaSemana   Dia da semana em que ocorre o turno
      * @param horaInicial Hora inicial do turno
@@ -17,23 +17,23 @@ public class TurnoT extends Turno{
      * @param lotacao     Lotação máxima do turno
      * @param sala        Sala onde decoree o turno
      */
-    public TurnoT(String cod, String codUC, DiaSemana diaSemana, LocalTime horaInicial, LocalTime horaFinal, int lotacao, String sala) {
-        super(cod, codUC, diaSemana, horaInicial, horaFinal, lotacao, sala);
+    public TurnoTP(String idTurno, String codUC, DiaSemana diaSemana, LocalTime horaInicial, LocalTime horaFinal, int lotacao, String sala) {
+        super(idTurno, codUC, diaSemana, horaInicial, horaFinal, lotacao, sala);
     }
 
     @Override
     public String getTipoTurno() {
-        return "T";
+        return "TP";
     }
 
     /**
-     * Método para representar o turno teórico como uma String.
+     * Método para representar o turno teórico-prático como uma String.
      *
      * @return Representação em String do turno
      */
     @Override
     public String toString() {
-        return "TurnoT{" + "cod='" + this.getCod() + '\'' + ", diaSemana='" + this.getDiaSemana() + '\'' +
+        return "TurnoTP{" + "idTurno='" + this.getIdTurno() + '\'' + ", diaSemana='" + this.getDiaSemana().toString() + '\'' +
                 ", horaInicial=" + this.getHoraInicial() + ", horaFinal=" + this.getHoraFinal() +
                 ", lotacao=" + this.getLotacao() + ", sala=" + this.getSala() + '}';
     }

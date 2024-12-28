@@ -1,4 +1,4 @@
-package business.SSHorario;
+package business.SSHorarios;
 
 import data.AlunoDAO;
 import data.SalaDAO;
@@ -11,7 +11,7 @@ import java.util.List;
  * Classe que representa um turno de uma unidade curricular.
  */
 public abstract class Turno implements Comparable<Turno> {
-    private String cod;                 // Código do turno
+    private String idTurno;             // Código do turno
     private String codUC;               // Código da UC do turno
     private DiaSemana diaSemana;        // Dia da semana em que ocorre o turno
     private LocalTime horaInicial;      // Hora inicial do turno
@@ -24,15 +24,15 @@ public abstract class Turno implements Comparable<Turno> {
     /**
      * Construtor para Turno.
      *
-     * @param cod         Código do turno
+     * @param idTurno     Código do turno
      * @param diaSemana   Dia da semana em que ocorre o turno
      * @param horaInicial Hora inicial do turno
      * @param horaFinal   Hora final do turno
      * @param lotacao     Lotação máxima do turno
      * @param sala        Sala onde decoree o turno
      */
-    public Turno(String cod, String codUC, DiaSemana diaSemana, LocalTime horaInicial, LocalTime horaFinal, int lotacao, String sala) {
-        this.cod = cod;
+    public Turno(String idTurno, String codUC, DiaSemana diaSemana, LocalTime horaInicial, LocalTime horaFinal, int lotacao, String sala) {
+        this.idTurno = idTurno;
         this.codUC = codUC;
         this.diaSemana = diaSemana;
         this.horaInicial = horaInicial;
@@ -44,12 +44,12 @@ public abstract class Turno implements Comparable<Turno> {
     }
 
     // Getters e Setters
-    public String getCod() {
-        return this.cod;
+    public String getIdTurno() {
+        return this.idTurno;
     }
 
-    public void setCod(String cod) {
-        this.cod = cod;
+    public void setIdTurno(String idTurno) {
+        this.idTurno = idTurno;
     }
 
     public String getCodUC() {
@@ -107,7 +107,7 @@ public abstract class Turno implements Comparable<Turno> {
      * @return Lista de alunos do turno.
      */
     public List<Aluno> getAlunosTurno() {
-        return new ArrayList<>(this.alunoDAO.getByTurno(this.cod));
+        return new ArrayList<>(this.alunoDAO.getByTurno(this.idTurno));
     }
 
     /**
@@ -116,7 +116,7 @@ public abstract class Turno implements Comparable<Turno> {
      * @return Inteiro com a quantidade de alunos do turno
      */
     public int qtdAlunos() {
-        return this.alunoDAO.sizeByTurno(this.cod);
+        return this.alunoDAO.sizeByTurno(this.idTurno);
     }
 
     /**
@@ -159,7 +159,7 @@ public abstract class Turno implements Comparable<Turno> {
         if (this == o) return true;
         if (!(o instanceof Turno)) return false;
         Turno turno = (Turno) o;
-        return this.cod.equals(turno.cod) &&
+        return this.idTurno.equals(turno.idTurno) &&
                 this.codUC.equals(turno.codUC);
     }
 
@@ -170,7 +170,7 @@ public abstract class Turno implements Comparable<Turno> {
      */
     @Override
     public int hashCode() {
-        return this.cod.hashCode();
+        return this.idTurno.hashCode();
     }
 }
 

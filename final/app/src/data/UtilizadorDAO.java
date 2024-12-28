@@ -14,12 +14,12 @@ public class UtilizadorDAO {
 
             // Criar a tabela 'utilizadores' se não existir
             String sql = "CREATE TABLE IF NOT EXISTS utilizadores (" +
-                    "id VARCHAR(10) NOT NULL PRIMARY KEY, " +
+                    "codUtilizador VARCHAR(10) NOT NULL PRIMARY KEY, " +
                     "senha VARCHAR(45) NOT NULL)";
             stm.executeUpdate(sql);
 
             // Criar Admin
-            sql = "INSERT IGNORE INTO utilizadores (id, senha) VALUES ('admin', 'admin')";
+            sql = "INSERT IGNORE INTO utilizadores (codUtilizador, senha) VALUES ('admin', 'admin')";
             stm.executeUpdate(sql);
 
         } catch (SQLException e) {
@@ -50,10 +50,10 @@ public class UtilizadorDAO {
      * @throws NullPointerException Em caso de erro - deveriam ser criadas exepções do projecto
      */
 
-    public boolean existeIdUtilizador(Object key) {
+    public boolean existeUtilizador(Object key) {
         boolean r = false;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-             PreparedStatement pstm = conn.prepareStatement("SELECT id FROM utilizadores WHERE id=?")) {
+             PreparedStatement pstm = conn.prepareStatement("SELECT codUtilizador FROM utilizadores WHERE codUtilizador=?")) {
             pstm.setString(1, key.toString());
             try (ResultSet rs = pstm.executeQuery()) {
                 r = rs.next();  // A chave existe na tabela
@@ -61,11 +61,34 @@ public class UtilizadorDAO {
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
-            throw new RuntimeException("Erro ao verificar id de utilizador: " + e.getMessage());
+            throw new RuntimeException("Erro ao verificar codUtilizador de utilizador: " + e.getMessage());
         }
         return r;
     }
 
+
+    /**
+     * Obtém a lista de códigos de todos os utilizadores no banco de dados.
+     *
+     * @return Lista de códigos dos utilizadores.
+     */
+    public List<String> getAllCods() {
+        List<String> cods = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery("SELECT codUtilizador FROM utilizadores")) {
+
+            while (rs.next()) {
+                cods.add(rs.getString("codUtilizador"));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar todos os IDs de utilizadores: " + e.getMessage(), e);
+        }
+
+        return cods;
+    }
 
     /**
      * Método para obter um user dado o seu ID.
@@ -77,7 +100,7 @@ public class UtilizadorDAO {
         Utilizador u = null;
 
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-             PreparedStatement pstm = conn.prepareStatement("SELECT * FROM utilizadores WHERE id = ?")) {
+             PreparedStatement pstm = conn.prepareStatement("SELECT * FROM utilizadores WHERE codUtilizador = ?")) {
             pstm.setString(1, id);
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
@@ -104,7 +127,7 @@ public class UtilizadorDAO {
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery("SELECT * FROM utilizadores")) {
             while (rs.next()) {
-                String id = rs.getString("id");
+                String id = rs.getString("codUtilizador");
                 String senha = rs.getString("senha");
 
                 Utilizador user;
@@ -130,7 +153,7 @@ public class UtilizadorDAO {
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery("SELECT * FROM utilizadores")) {
             while (rs.next()) {
-                String id = rs.getString("id");
+                String id = rs.getString("codUtilizador");
                 String senha = rs.getString("senha");
 
                 Utilizador user;
@@ -157,11 +180,11 @@ public class UtilizadorDAO {
             conn.setAutoCommit(false); // Inicia a transação
 
             try (PreparedStatement pstm = conn.prepareStatement(
-                    "INSERT INTO utilizadores (id, senha) VALUES (?, ?) " +
+                    "INSERT INTO utilizadores (codUtilizador, senha) VALUES (?, ?) " +
                             "ON DUPLICATE KEY UPDATE senha = VALUES(senha)")
             ) {
                 for (Utilizador utilizador : utilizadores) {
-                    pstm.setString(1, utilizador.getId());
+                    pstm.setString(1, utilizador.getCodUtilizador());
                     pstm.setString(2, utilizador.getSenha());
                     pstm.addBatch(); // Adiciona ao batch para execução em lote
                 }
@@ -183,6 +206,54 @@ public class UtilizadorDAO {
                 try {
                     conn.setAutoCommit(true); // Restaura o modo de auto-commit
                     conn.close(); // Fecha a conexão
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * Remove múltiplos utilizadores do banco de dados com base em uma lista de IDs, com suporte a rollback.
+     *
+     * @param cods Lista de IDs dos utilizadores a serem removidos.
+     */
+    public void removerLista(List<String> cods) {
+        if (cods == null || cods.isEmpty()) return;
+
+        String sql = "DELETE FROM utilizadores WHERE codUtilizador = ?";
+
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement pstm = conn.prepareStatement(sql)) {
+                for (String id : cods) {
+                    pstm.setString(1, id);
+                    pstm.addBatch();
+                }
+
+                pstm.executeBatch();
+                conn.commit();
+            }
+
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                    throw new RuntimeException("Erro ao fazer rollback da remoção: " + rollbackEx.getMessage(), rollbackEx);
+                }
+            }
+            throw new RuntimeException("Erro ao remover lista de utilizadores: " + e.getMessage(), e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }

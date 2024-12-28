@@ -1,4 +1,4 @@
-package business.SSHorario;
+package business.SSHorarios;
 
 /**
  * Classe que representa uma sala de aulas.

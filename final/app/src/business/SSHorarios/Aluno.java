@@ -1,4 +1,4 @@
-package business.SSHorario;
+package business.SSHorarios;
 
 import data.TurnoDAO;
 
@@ -8,7 +8,7 @@ import java.util.*;
  * Classe que representa um aluno no sistema.
  */
 public class Aluno {
-    private String numero;      // Identificador único do aluno
+    private String codAluno;    // Identificador único do aluno
     private String nome;        // Nome do aluno
     private double media;       // Média do aluno
     private TurnoDAO turnos;    // DAO dos turnos
@@ -16,12 +16,12 @@ public class Aluno {
     /**
      * Construtor para criar um aluno.
      *
-     * @param numero Identificador único do aluno (número)
+     * @param codAluno Identificador único do aluno (número)
      * @param nome   Nome do aluno
      * @param media  Média do aluno
      */
-    public Aluno(String numero, String nome, double media) {
-        this.numero = numero;
+    public Aluno(String codAluno, String nome, double media) {
+        this.codAluno = codAluno;
         this.nome = nome;
         this.media = media;
         this.turnos = TurnoDAO.getInstance();
@@ -32,17 +32,17 @@ public class Aluno {
      *
      * @return Número do aluno
      */
-    public String getNumero() {
-        return numero;
+    public String getCodAluno() {
+        return codAluno;
     }
 
     /**
      * Define um novo número para o aluno.
      *
-     * @param numero Novo número do aluno
+     * @param codAluno Novo número do aluno
      */
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public void setCodAluno(String codAluno) {
+        this.codAluno = codAluno;
     }
 
     /**
@@ -96,7 +96,7 @@ public class Aluno {
      * @return Map onde a chave é o código da UC e o valor é uma lista de Turnos associados.
      */
     public Map<String, List<Turno>> getTurnos() {
-        return this.turnos.getByAluno(this.numero);
+        return this.turnos.getByAluno(this.codAluno);
     }
 
     /**
@@ -105,7 +105,7 @@ public class Aluno {
      * @return Map onde a chave é o Dia da Semana e o valor é uma lista de Turnos ordenados pela hora inicial.
      */
     public Map<DiaSemana, List<Turno>> getHorario() {
-        Map<String, List<Turno>> turnosPorUC = this.turnos.getByAluno(this.numero);
+        Map<String, List<Turno>> turnosPorUC = this.turnos.getByAluno(this.codAluno);
         Map<DiaSemana, List<Turno>> horario = new HashMap<>();
 
         // Iterar por todos os turnos agrupados por UC
@@ -148,7 +148,7 @@ public class Aluno {
             if (turnosDia == null) continue;
             for (Turno t : turnosDia) {
                 res.append("    ").append(t.getHoraInicial()).append("-").append(t.getHoraFinal())
-                    .append(" -> Turno").append(t.getCod()).append(" da UC ").append(t.getCodUC()).append(";\n");
+                    .append(" -> Turno").append(t.getIdTurno()).append(" da UC ").append(t.getCodUC()).append(";\n");
             }
         }
         return res.toString();
@@ -162,7 +162,7 @@ public class Aluno {
     @Override
     public String toString() {
         return "Aluno{" +
-                "numero='" + numero + '\'' +
+                "numero='" + codAluno + '\'' +
                 ", nome='" + nome + '\'' +
                 ", media=" + media +
                 ", estatuto=" + getEstatuto() +
@@ -180,7 +180,7 @@ public class Aluno {
         if (this == o) return true;
         if (!(o instanceof Aluno)) return false;
         Aluno aluno = (Aluno) o;
-        return numero.equals(aluno.numero);
+        return codAluno.equals(aluno.codAluno);
     }
 
     /**
@@ -190,6 +190,6 @@ public class Aluno {
      */
     @Override
     public int hashCode() {
-        return numero.hashCode();
+        return codAluno.hashCode();
     }
 }

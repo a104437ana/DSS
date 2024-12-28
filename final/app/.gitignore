@@ -75,3 +75,4 @@ pom.properties
 createdFiles.lst
 ProjetoDSS-1.0-SNAPSHOT.jar
 
+src/data/DAOconfig

@@ -1,6 +1,6 @@
 package data;
 
-import business.SSHorario.*;
+import business.SSHorarios.*;
 
 import java.sql.*;
 import java.time.LocalTime;
@@ -19,7 +19,7 @@ public class TurnoDAO {
 
             // Tabela base 'turnos'
             String sql = "CREATE TABLE IF NOT EXISTS turnos (" +
-                    "cod VARCHAR(10) NOT NULL PRIMARY KEY, " +
+                    "idTurno VARCHAR(10) NOT NULL PRIMARY KEY, " +
                     "codUC VARCHAR(10) NOT NULL, " +
                     "diaSemana VARCHAR(10) NOT NULL, " +
                     "horaInicial TIME NOT NULL, " +
@@ -27,26 +27,26 @@ public class TurnoDAO {
                     "lotacao INT NOT NULL, " +
                     "sala VARCHAR(50) NOT NULL, " +
                     "tipo ENUM('TP', 'T', 'PL') NOT NULL, " +
-                    "FOREIGN KEY (codUC) REFERENCES ucs(cod), " +
+                    "FOREIGN KEY (codUC) REFERENCES ucs(codUC), " +
                     "FOREIGN KEY (sala) REFERENCES salas(localizacao))";
             stm.executeUpdate(sql);
 
             // Tabela 'turnosTP'
             sql = "CREATE TABLE IF NOT EXISTS turnosTP (" +
-                    "cod VARCHAR(10) NOT NULL PRIMARY KEY, " +
-                    "FOREIGN KEY (cod) REFERENCES turnos(cod))";
+                    "idTurno VARCHAR(10) NOT NULL PRIMARY KEY, " +
+                    "FOREIGN KEY (idTurno) REFERENCES turnos(idTurno))";
             stm.executeUpdate(sql);
 
             // Tabela 'turnosT'
             sql = "CREATE TABLE IF NOT EXISTS turnosT (" +
-                    "cod VARCHAR(10) NOT NULL PRIMARY KEY, " +
-                    "FOREIGN KEY (cod) REFERENCES turnos(cod))";
+                    "idTurno VARCHAR(10) NOT NULL PRIMARY KEY, " +
+                    "FOREIGN KEY (idTurno) REFERENCES turnos(idTurno))";
             stm.executeUpdate(sql);
 
             // Tabela 'turnosPL'
             sql = "CREATE TABLE IF NOT EXISTS turnosPL (" +
                     "cod VARCHAR(10) NOT NULL PRIMARY KEY, " +
-                    "FOREIGN KEY (cod) REFERENCES turnos(cod))";
+                    "FOREIGN KEY (idTurno) REFERENCES turnos(idTurno))";
             stm.executeUpdate(sql);
 
         } catch (SQLException e) {
@@ -76,7 +76,7 @@ public class TurnoDAO {
     public Turno get(String cod) {
         Turno turno = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-             PreparedStatement pstm = conn.prepareStatement("SELECT * FROM turnos WHERE cod = ?")) {
+             PreparedStatement pstm = conn.prepareStatement("SELECT * FROM turnos WHERE idTurno = ?")) {
             pstm.setString(1, cod);
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
@@ -122,7 +122,7 @@ public class TurnoDAO {
 
             try (ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
-                    String cod = rs.getString("cod");
+                    String cod = rs.getString("idTurno");
                     DiaSemana diaSemana = DiaSemana.valueOf(rs.getString("diaSemana"));
                     LocalTime horaInicial = rs.getTime("horaInicial").toLocalTime();
                     LocalTime horaFinal = rs.getTime("horaFinal").toLocalTime();
@@ -161,11 +161,11 @@ public class TurnoDAO {
      */
     public Map<String, List<Turno>> getByAluno(String numAluno) {
         Map<String, List<Turno>> horario = new HashMap<>();
-        String sql = "SELECT t.cod AS turnoCod, t.codUC AS ucCod, t.diaSemana, t.horaInicial, " +
+        String sql = "SELECT t.idTurno AS turnoCod, t.codUC AS ucCod, t.diaSemana, t.horaInicial, " +
                 "t.horaFinal, t.lotacao, t.sala, t.tipo " +
                 "FROM turnos t " +
-                "JOIN turnosDoAluno ta ON t.cod = ta.codTurno " +
-                "WHERE ta.aluno_num = ?";
+                "JOIN turnosDoAluno ta ON t.idTurno = ta.idTurno " +
+                "WHERE ta.codAluno = ?";
 
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              PreparedStatement pstm = conn.prepareStatement(sql)) {
@@ -174,7 +174,7 @@ public class TurnoDAO {
 
             try (ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
-                    String turnoCod = rs.getString("turnoCod");
+                    String turnoCod = rs.getString("idTurno");
                     String ucCod = rs.getString("ucCod");
                     DiaSemana diaSemana = DiaSemana.valueOf(rs.getString("diaSemana"));
                     LocalTime horaInicial = rs.getTime("horaInicial").toLocalTime();
@@ -220,7 +220,7 @@ public class TurnoDAO {
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery("SELECT * FROM turnos")) {
             while (rs.next()) {
-                String cod = rs.getString("cod");
+                String cod = rs.getString("idTurno");
                 String codUC = rs.getString("codUC");
                 DiaSemana diaSemana = DiaSemana.valueOf(rs.getString("diaSemana"));
                 LocalTime horaInicial = rs.getTime("horaInicial").toLocalTime();
@@ -258,7 +258,7 @@ public class TurnoDAO {
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery("SELECT * FROM turnos")) {
             while (rs.next()) {
-                String cod = rs.getString("cod");
+                String cod = rs.getString("idTurno");
                 String codUC = rs.getString("codUC");
                 DiaSemana diaSemana = DiaSemana.valueOf(rs.getString("diaSemana"));
                 LocalTime horaInicial = rs.getTime("horaInicial").toLocalTime();
