@@ -4,25 +4,25 @@ package business.SSUtilizadores;
  * Classe que representa um utilizador genérico no sistema.
  */
 public class Utilizador implements Comparable<Utilizador> {
-    private final String id; // Identificador único
+    private final String codUtilizador; // Identificador único
     private String senha;    // Senha do utilizador
 
     /**
      * Construtor para Utilizador.
      *
-     * @param id    Identificador único do utilizador
+     * @param codUtilizador    Identificador único do utilizador
      * @param senha Senha do utilizador
      */
-    public Utilizador(String id, String senha) {
-        this.id = id;
+    public Utilizador(String codUtilizador, String senha) {
+        this.codUtilizador = codUtilizador;
         this.senha = senha;
     }
 
     /**
      * @return O identificador único do utilizador.
      */
-    public String getId() {
-        return id;
+    public String getCodUtilizador() {
+        return codUtilizador;
     }
 
     /**
@@ -49,7 +49,7 @@ public class Utilizador implements Comparable<Utilizador> {
      */
     @Override
     public int compareTo(Utilizador o) {
-        return this.id.compareTo(o.getId());
+        return this.codUtilizador.compareTo(o.getCodUtilizador());
     }
 
     /**
@@ -63,7 +63,7 @@ public class Utilizador implements Comparable<Utilizador> {
         if (this == o) return true; // Verifica se é o mesmo objeto
         if (o == null || this.getClass() != o.getClass()) return false; // Verifica se é nulo ou de outra classe
         Utilizador utilizador = (Utilizador) o; // Casting para Utilizador
-        return this.id.equals(utilizador.id);
+        return this.codUtilizador.equals(utilizador.codUtilizador);
     }
 
     /**
@@ -73,6 +73,6 @@ public class Utilizador implements Comparable<Utilizador> {
      */
     @Override
     public int hashCode() {
-        return this.id.hashCode();
+        return this.codUtilizador.hashCode();
     }
 }

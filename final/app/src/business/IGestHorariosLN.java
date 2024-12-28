@@ -5,9 +5,8 @@ public interface IGestHorariosLN {
      * Importa utilizadores, alunos e suas inscrições de dois arquivos CSV.
      *
      * @param ficheiroAlunos Caminho para o arquivo CSV contendo os dados dos alunos.
-     * @param ficheiroUCs Caminho para o arquivo CSV contendo as inscrições dos alunos nas UCs.
      */
-    void importAlunos(String ficheiroAlunos, String ficheiroUCs);
+    void importarAlunos(String ficheiroAlunos);
 
     /**
      * Consulta horário de um determinado aluno.
@@ -25,7 +24,7 @@ public interface IGestHorariosLN {
      *
      * @return String com id do utilizador autenticado ou null se credenciais estão inválidas
      */
-    String login(String id, String senha);
+    String iniciarSessao(String id, String senha);
 
     /**
      * Método que preenche as tabelas das salas, ucs e turnos com dados pré-definidos.

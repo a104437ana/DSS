@@ -1,4 +1,4 @@
-package business.SSHorario;
+package business.SSHorarios;
 
 
 import data.AlunoDAO;
@@ -7,28 +7,28 @@ import data.AlunoDAO;
  * Classe que representa uma inscrição de um aluno em uma UC.
  */
 public class Inscricao {
-    private String alunoId;  // Identificador do aluno
+    private String codAluno;  // Identificador do aluno
     private int nInscricao;  // Número da inscrição
     private AlunoDAO alunos;
 
     /**
      * Construtor para criar uma inscrição.
      *
-     * @param alunoId     Identificador do aluno.
+     * @param codAluno     Identificador do aluno.
      * @param nInscricao  Número da inscrição.
      */
-    public Inscricao(String alunoId, int nInscricao) {
-        this.alunoId = alunoId;
+    public Inscricao(String codAluno, int nInscricao) {
+        this.codAluno = codAluno;
         this.nInscricao = nInscricao;
         this.alunos = AlunoDAO.getInstance();
     }
 
-    public String getAlunoId() {
-        return alunoId;
+    public String getCodAluno() {
+        return codAluno;
     }
 
-    public void setAlunoId(String alunoId) {
-        this.alunoId = alunoId;
+    public void setCodAluno(String codAluno) {
+        this.codAluno = codAluno;
     }
 
     public int getNInscricao() {
@@ -41,14 +41,14 @@ public class Inscricao {
 
     // Método de DAO
     public Aluno getAluno(){
-        return this.alunos.get(this.alunoId);
+        return this.alunos.get(this.codAluno);
     }
 
     @Override
     public String toString() {
         return "Inscricao{" +
-                "alunoId='" + alunoId + '\'' +
-                ", nInscricao=" + nInscricao +
+                "Código de aluno ='" + codAluno + '\'' +
+                ", Número da inscrição =" + nInscricao +
                 '}';
     }
 }

@@ -1,4 +1,4 @@
-package business.SSHorario;
+package business.SSHorarios;
 
 import data.InscritoDAO;
 import data.TurnoDAO;
@@ -10,7 +10,7 @@ import java.util.List;
  * Classe que representa uma unidade curricular (UC).
  */
 public class UC {
-    private String cod;                 // Código da unidade curricular
+    private String codUC;               // Código da unidade curricular
     private String nome;                // Nome da unidade curricular
     private int semestre;               // Semestre em que a unidade curricular é lecionada
     private boolean opcional;           // Indica se a unidade curricular é opcional
@@ -22,14 +22,14 @@ public class UC {
     /**
      * Construtor para Unidade Curricular (UC) sem turnos.
      *
-     * @param cod         Código da UC
+     * @param codUC       Código da UC
      * @param nome        Nome da UC
      * @param semestre    Semestre da UC
      * @param opcional    Indicador de se a UC é opcional
      * @param preferencia Preferência da UC
      */
-    public UC(String cod, String nome, int semestre, boolean opcional, Pref preferencia) {
-        this.cod = cod;
+    public UC(String codUC, String nome, int semestre, boolean opcional, Pref preferencia) {
+        this.codUC = codUC;
         this.nome = nome;
         this.semestre = semestre;
         this.opcional = opcional;
@@ -39,12 +39,12 @@ public class UC {
     }
 
     // Getters e Setters
-    public String getCod() {
-        return this.cod;
+    public String getCodUC() {
+        return this.codUC;
     }
 
-    public void setCod(String cod) {
-        this.cod = cod;
+    public void setCodUC(String codUC) {
+        this.codUC = codUC;
     }
 
     public String getNome() {
@@ -86,7 +86,7 @@ public class UC {
      * @return Lista de turnos da UC.
      */
     public List<Turno> getTurnos() {
-        return new ArrayList<>(this.turnoDAO.getByUC(this.cod));
+        return new ArrayList<>(this.turnoDAO.getByUC(this.codUC));
     }
 
     /**
@@ -95,7 +95,7 @@ public class UC {
      * @param inscricao Inscrição a adicionar.
      */
     public void adicionarInscricao(Inscricao inscricao) {
-        this.inscritoDAO.put(this.cod, inscricao);
+        this.inscritoDAO.put(this.codUC, inscricao);
     }
 
     /**
@@ -104,7 +104,14 @@ public class UC {
      * @param inscricoes Lista de inscrições a adicionar.
      */
     public void adicionarInscricoes(List<Inscricao> inscricoes) {
-        this.inscritoDAO.putAll(this.cod, inscricoes);
+        this.inscritoDAO.putAll(this.codUC, inscricoes);
+    }
+
+    /**
+     * Método que remove inscrições da UC.
+     */
+    public void removerInscricoes() {
+        this.inscritoDAO.removerInscricoesUC(this.codUC);
     }
 
     /**
@@ -113,7 +120,7 @@ public class UC {
      * @return Lista de inscrições da UC.
      */
     public List<Inscricao> getInscricoes() {
-        return this.inscritoDAO.getByUC(this.cod);
+        return this.inscritoDAO.getByUC(this.codUC);
     }
 
 
@@ -124,7 +131,7 @@ public class UC {
      */
     @Override
     public String toString() {
-        return "UC{" + "cod='" + this.cod + '\'' + ", nome='" + this.nome + '\'' +
+        return "UC{" + "codUC='" + this.codUC + '\'' + ", nome='" + this.nome + '\'' +
                 ", semestre=" + this.semestre + ", opcional=" + this.opcional +
                 ", preferencia='" + this.preferencia + '\'' + '}';
     }
@@ -140,7 +147,7 @@ public class UC {
         if (this == o) return true;
         if (!(o instanceof UC)) return false;
         UC uc = (UC) o;
-        return this.cod.equals(uc.cod);
+        return this.codUC.equals(uc.codUC);
 
     }
 
@@ -151,6 +158,6 @@ public class UC {
      */
     @Override
     public int hashCode() {
-        return this.cod.hashCode();
+        return this.codUC.hashCode();
     }
 }

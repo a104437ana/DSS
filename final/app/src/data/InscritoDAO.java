@@ -1,6 +1,6 @@
 package data;
 
-import business.SSHorario.Inscricao;
+import business.SSHorarios.Inscricao;
 
 import java.sql.*;
 import java.util.*;
@@ -18,7 +18,7 @@ public class InscritoDAO {
 
             // Criar a tabela 'alunos' se não existir
             String sql = "CREATE TABLE IF NOT EXISTS alunos (" +
-                    "num VARCHAR(10) NOT NULL PRIMARY KEY, " +
+                    "codAluno VARCHAR(10) NOT NULL PRIMARY KEY, " +
                     "nome VARCHAR(100) NOT NULL, " +
                     "media DOUBLE NOT NULL, " +
                     "estatuto VARCHAR(20))";
@@ -26,12 +26,12 @@ public class InscritoDAO {
 
             // Criar a tabela 'inscricoes' se não existir
             sql = "CREATE TABLE IF NOT EXISTS inscricoes (" +
-                    "uc_cod VARCHAR(10) NOT NULL, " +
-                    "aluno_num VARCHAR(10) NOT NULL, " +
-                    "n_inscricao INT NOT NULL, " +
-                    "PRIMARY KEY (uc_cod, aluno_num), " +
-                    "FOREIGN KEY (uc_cod) REFERENCES ucs(cod), " +
-                    "FOREIGN KEY (aluno_num) REFERENCES alunos(num))";
+                    "codUC VARCHAR(10) NOT NULL, " +
+                    "codAluno VARCHAR(10) NOT NULL, " +
+                    "nInscricao INT NOT NULL, " +
+                    "PRIMARY KEY (codUC, codAluno), " +
+                    "FOREIGN KEY (codUC) REFERENCES ucs(codUC), " +
+                    "FOREIGN KEY (codAluno) REFERENCES alunos(codAluno))";
             stm.executeUpdate(sql);
 
         } catch (SQLException e) {
@@ -61,11 +61,11 @@ public class InscritoDAO {
     public void put(String ucCod, Inscricao inscricao) {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              PreparedStatement pstm = conn.prepareStatement(
-                     "INSERT INTO inscricoes (uc_cod, aluno_num, n_inscricao) VALUES (?, ?, ?) " +
-                             "ON DUPLICATE KEY UPDATE n_inscricao = VALUES(n_inscricao)")
+                     "INSERT INTO inscricoes (codUC, codAluno, nInscricao) VALUES (?, ?, ?) " +
+                             "ON DUPLICATE KEY UPDATE nInscricao = VALUES(nInscricao)")
         ) {
             pstm.setString(1, ucCod);
-            pstm.setString(2, inscricao.getAlunoId());
+            pstm.setString(2, inscricao.getCodAluno());
             pstm.setInt(3, inscricao.getNInscricao());
             pstm.executeUpdate();
         } catch (SQLException e) {
@@ -87,12 +87,12 @@ public class InscritoDAO {
             conn.setAutoCommit(false); // Iniciar transação
 
             try (PreparedStatement pstm = conn.prepareStatement(
-                    "INSERT INTO inscricoes (uc_cod, aluno_num, n_inscricao) VALUES (?, ?, ?) " +
-                            "ON DUPLICATE KEY UPDATE n_inscricao = VALUES(n_inscricao)")
+                    "INSERT INTO inscricoes (codUC, codAluno, nInscricao) VALUES (?, ?, ?) " +
+                            "ON DUPLICATE KEY UPDATE nInscricao = VALUES(nInscricao)")
             ) {
                 for (Inscricao inscricao : inscricoes) {
                     pstm.setString(1, ucCod);
-                    pstm.setString(2, inscricao.getAlunoId());
+                    pstm.setString(2, inscricao.getCodAluno());
                     pstm.setInt(3, inscricao.getNInscricao());
                     pstm.addBatch();
                 }
@@ -122,6 +122,24 @@ public class InscritoDAO {
     }
 
     /**
+     * Método para remover todas as inscrições de uma dada UC.
+     */
+    public void removerInscricoesUC(String codUC) {
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             PreparedStatement pstm = conn.prepareStatement(
+                     "DELETE FROM inscricoes WHERE codUC = ?")
+            ) {
+
+            pstm.setString(1, codUC);
+            pstm.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao deletar todos as inscricoes da UC: " + e.getMessage());
+        }
+    }
+
+    /**
      * Obtém todas as inscrições de uma UC.
      *
      * @param ucCod Código da UC.
@@ -130,12 +148,12 @@ public class InscritoDAO {
     public List<Inscricao> getByUC(String ucCod) {
         List<Inscricao> inscricoes = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-             PreparedStatement pstm = conn.prepareStatement("SELECT * FROM inscricoes WHERE uc_cod = ?")) {
+             PreparedStatement pstm = conn.prepareStatement("SELECT * FROM inscricoes WHERE codUC = ?")) {
             pstm.setString(1, ucCod);
             try (ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
-                    String alunoNum = rs.getString("aluno_num");
-                    int nInscricao = rs.getInt("n_inscricao");
+                    String alunoNum = rs.getString("codAluno");
+                    int nInscricao = rs.getInt("nInscricao");
                     inscricoes.add(new Inscricao(alunoNum, nInscricao));
                 }
             }

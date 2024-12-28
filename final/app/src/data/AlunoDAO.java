@@ -1,9 +1,8 @@
 package data;
 
-import business.SSHorario.Aluno;
-import business.SSHorario.AlunoEstatuto;
+import business.SSHorarios.Aluno;
+import business.SSHorarios.AlunoEstatutoEspecial;
 
-import java.security.KeyPair;
 import java.sql.*;
 import java.util.*;
 
@@ -22,18 +21,18 @@ public class AlunoDAO {
 
             // Criar a tabela 'alunos' se não existir
             String sql = "CREATE TABLE IF NOT EXISTS alunos (" +
-                    "num VARCHAR(10) NOT NULL PRIMARY KEY, " +
+                    "codAluno VARCHAR(10) NOT NULL PRIMARY KEY, " +
                     "nome VARCHAR(100) NOT NULL, " +
                     "media DOUBLE NOT NULL, " +
                     "estatuto VARCHAR(20))";
             stm.executeUpdate(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS turnosDoAluno (" +
-                    "aluno_num VARCHAR(10) NOT NULL, " +
-                    "turno_cod VARCHAR(10) NOT NULL, " +
-                    "PRIMARY KEY (aluno_num, turno_cod), " +
-                    "FOREIGN KEY (aluno_num) REFERENCES alunos(num), " +
-                    "FOREIGN KEY (turno_cod) REFERENCES turnos(cod))";
+                    "codAluno VARCHAR(10) NOT NULL, " +
+                    "idTurno VARCHAR(10) NOT NULL, " +
+                    "PRIMARY KEY (codAluno, idTurno), " +
+                    "FOREIGN KEY (codAluno) REFERENCES alunos(codAluno), " +
+                    "FOREIGN KEY (idTurno) REFERENCES turnos(idTurno))";
             stm.executeUpdate(sql);
 
         } catch (SQLException e) {
@@ -65,7 +64,7 @@ public class AlunoDAO {
     public boolean existeAluno(Object key) {
         boolean r = false;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-             PreparedStatement pstm = conn.prepareStatement("SELECT cod FROM alunos WHERE num=?")) {
+             PreparedStatement pstm = conn.prepareStatement("SELECT codAluno FROM alunos WHERE codAluno=?")) {
             pstm.setString(1, key.toString());
             try (ResultSet rs = pstm.executeQuery()) {
                 r = rs.next();  // A chave existe na tabela
@@ -93,7 +92,7 @@ public class AlunoDAO {
         Aluno a = (Aluno) value;
 
         // Verifica se a chave (código) existe e compara o aluno da base de dados com o aluno fornecido
-        return this.existeAluno(a.getNumero()) && a.equals(this.get(a.getNumero()));
+        return this.existeAluno(a.getCodAluno()) && a.equals(this.get(a.getCodAluno()));
     }
 
 
@@ -121,10 +120,10 @@ public class AlunoDAO {
     public void put(Aluno aluno) {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              PreparedStatement pstm = conn.prepareStatement(
-                     "INSERT INTO alunos (num, nome, media, estatuto) VALUES (?, ?, ?, ?) " +
+                     "INSERT INTO alunos (codAluno, nome, media, estatuto) VALUES (?, ?, ?, ?) " +
                              "ON DUPLICATE KEY UPDATE nome = VALUES(nome), media = VALUES(media), estatuto = VALUES(estatuto)")
         ) {
-            pstm.setString(1, aluno.getNumero());
+            pstm.setString(1, aluno.getCodAluno());
             pstm.setString(2, aluno.getNome());
             pstm.setDouble(3, aluno.getMedia());
             pstm.setString(4, aluno.getEstatuto());
@@ -147,11 +146,11 @@ public class AlunoDAO {
             conn.setAutoCommit(false); // Iniciar transação
 
             try (PreparedStatement pstm = conn.prepareStatement(
-                    "INSERT INTO alunos (num, nome, media, estatuto) VALUES (?, ?, ?, ?) " +
+                    "INSERT INTO alunos (codAluno, nome, media, estatuto) VALUES (?, ?, ?, ?) " +
                             "ON DUPLICATE KEY UPDATE nome = VALUES(nome), media = VALUES(media), estatuto = VALUES(estatuto)")
             ) {
                 for (Aluno aluno : alunos) {
-                    pstm.setString(1, aluno.getNumero());
+                    pstm.setString(1, aluno.getCodAluno());
                     pstm.setString(2, aluno.getNome());
                     pstm.setDouble(3, aluno.getMedia());
                     pstm.setString(4, aluno.getEstatuto());
@@ -190,10 +189,10 @@ public class AlunoDAO {
      */
     public Collection<Aluno> getByTurno(String turnoCod) {
         Collection<Aluno> alunos = new ArrayList<>();
-        String sql = "SELECT a.num, a.nome, a.media, a.estatuto " +
+        String sql = "SELECT a.codAluno, a.nome, a.media, a.estatuto " +
                 "FROM alunos a " +
-                "JOIN turnosDoAluno ta ON a.num = ta.aluno_num " +
-                "WHERE ta.turno_cod = ?";
+                "JOIN turnosDoAluno ta ON a.codAluno = ta.codAluno " +
+                "WHERE ta.idTurno = ?";
 
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              PreparedStatement pstm = conn.prepareStatement(sql)) {
@@ -202,7 +201,7 @@ public class AlunoDAO {
 
             try (ResultSet rs = pstm.executeQuery()) {
                 while (rs.next()) {
-                    String numero = rs.getString("num");
+                    String numero = rs.getString("codAluno");
                     String nome = rs.getString("nome");
                     double media = rs.getDouble("media");
                     String estatuto = rs.getString("estatuto");
@@ -210,7 +209,7 @@ public class AlunoDAO {
                     if (estatuto.equals("Nenhum")) {
                         aluno = new Aluno(numero, nome, media);
                     } else {
-                        aluno = new AlunoEstatuto(numero, nome, media);
+                        aluno = new AlunoEstatutoEspecial(numero, nome, media);
                     }
                     alunos.add(aluno);
                 }
@@ -234,7 +233,7 @@ public class AlunoDAO {
         int size = 0;
         String sql = "SELECT COUNT(*) AS total " +
                 "FROM turnosDoAluno " +
-                "WHERE turno_cod = ?";
+                "WHERE idTurno = ?";
 
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              PreparedStatement pstm = conn.prepareStatement(sql)) {
@@ -265,7 +264,7 @@ public class AlunoDAO {
     public Aluno get(String numero) {
         Aluno aluno = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-             PreparedStatement pstm = conn.prepareStatement("SELECT * FROM alunos WHERE num = ?")) {
+             PreparedStatement pstm = conn.prepareStatement("SELECT * FROM alunos WHERE codAluno = ?")) {
             pstm.setString(1, numero);
             try (ResultSet rs = pstm.executeQuery()) {
                 if (rs.next()) {
@@ -275,7 +274,7 @@ public class AlunoDAO {
                     if (estatuto.equals("Nenhum")) {
                         aluno = new Aluno(numero, nome, media);
                     } else {
-                        aluno = new AlunoEstatuto(numero, nome, media);
+                        aluno = new AlunoEstatutoEspecial(numero, nome, media);
                     }
                 }
             }
@@ -297,7 +296,7 @@ public class AlunoDAO {
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery("SELECT * FROM alunos")) {
             while (rs.next()) {
-                String numero = rs.getString("num");
+                String numero = rs.getString("codAluno");
                 String nome = rs.getString("nome");
                 double media = rs.getDouble("media");
                 String estatuto = rs.getString("estatuto");
@@ -305,7 +304,7 @@ public class AlunoDAO {
                 if (estatuto.equals("Nenhum")) {
                     aluno = new Aluno(numero, nome, media);
                 } else {
-                    aluno = new AlunoEstatuto(numero, nome, media);
+                    aluno = new AlunoEstatutoEspecial(numero, nome, media);
                 }
                 alunos.add(aluno);
             }
@@ -327,7 +326,7 @@ public class AlunoDAO {
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery("SELECT * FROM alunos")) {
             while (rs.next()) {
-                String numero = rs.getString("num");
+                String numero = rs.getString("codAluno");
                 String nome = rs.getString("nome");
                 double media = rs.getDouble("media");
                 String estatuto = rs.getString("estatuto");
@@ -335,7 +334,7 @@ public class AlunoDAO {
                 if (estatuto.equals("Nenhum")) {
                     aluno = new Aluno(numero, nome, media);
                 } else {
-                    aluno = new AlunoEstatuto(numero, nome, media);
+                    aluno = new AlunoEstatutoEspecial(numero, nome, media);
                 }
                 alunosMap.put(numero, aluno);
             }

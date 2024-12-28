@@ -1,4 +1,4 @@
-package business.SSHorario;
+package business.SSHorarios;
 
 public enum DiaSemana {
     SEGUNDA("Segunda-Feira"),

@@ -1,11 +1,11 @@
-package business.SSHorario;
+package business.SSHorarios;
 
 /**
  * Classe que representa um aluno com estatuto específico.
  */
-public class AlunoEstatuto extends Aluno {
+public class AlunoEstatutoEspecial extends Aluno {
 
-    public AlunoEstatuto(String numero, String nome, double media) {
+    public AlunoEstatutoEspecial(String numero, String nome, double media) {
         super(numero, nome, media);
     }
 

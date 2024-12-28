@@ -1,6 +1,6 @@
 package ui;
 
-import business.GestHorariosLN;
+import business.GestHorariosFacade;
 import business.IGestHorariosLN;
 
 
@@ -25,7 +25,7 @@ public class TextUI {
      * Cria os menus e a camada de negócio.
      */
     public TextUI() {
-        model = new GestHorariosLN();
+        model = new GestHorariosFacade();
         scin = new Scanner(System.in);
     }
 
@@ -54,7 +54,7 @@ public class TextUI {
         System.out.println("Insira senha de utilizador: ");
         String senha = scin.nextLine();
 
-        String user = this.model.login(cod, senha);
+        String user = this.model.iniciarSessao(cod, senha);
         if (user == null) {
             System.out.println("Credenciais inválidas!");
         } else if (user.equals("admin")) {
@@ -150,7 +150,7 @@ public class TextUI {
         });
 
         menu.setHandler(1, ()->this.model.inicializacaoSalasUCsTurnos());
-        menu.setHandler(2, ()->this.model.importAlunos("src/csv/alunos.csv", "src/csv/inscritos.csv"));
+        menu.setHandler(2, ()->this.model.importarAlunos("src/csv/alunos.csv"));
 
         menu.run();
     }
