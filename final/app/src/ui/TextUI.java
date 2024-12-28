@@ -70,20 +70,23 @@ public class TextUI {
      */
     private void menuPrincipalAdmin(String user) {
         Menu menu = new Menu(new String[]{
-                "Importação",
-                "Operações de Listagem",
+                "Importar alunos",
+                "Alocar aluno ao turno de uma UC",
+                "Remover aluno do turno de uma UC ",
+                "Gerar horários automáticamente"
+                //"Operações de Listagem",
 //                "Definição das Preferências e Limites",
 //                "Criação e Gestão de Horários de Alunos",
 //                "Verificação de Conflitos e Problemas",
-                "Minha conta"
+                //"Minha conta"
         });
 
         menu.setHandler(1, this::menuImport);
-        menu.setHandler(2, this::menuListagem);
+       // menu.setHandler(2, this::menuListagem);
 //        menu.setHandler(3, this::menuDefinirPrefLim);
 //        menu.setHandler(4, this::menuGestaoHorario);
 //        menu.setHandler(5, this::menuVerificar);
-        menu.setHandler(3, ()->this.menuConta(user));
+        //menu.setHandler(3, ()->this.menuConta(user));
 
         menu.run();
     }
@@ -94,12 +97,11 @@ public class TextUI {
     private void menuPrincipalAluno(String user) {
 
         Menu menu = new Menu(new String[]{
-                "Consultar o meu Horário",
-                "Minha Conta"
+                "Consultar o meu Horário"
         });
 
         menu.setHandler(1, ()->this.model.consultarHorario(user));
-        menu.setHandler(1, ()->this.menuConta(user));
+       // menu.setHandler(1, ()->this.menuConta(user));
 
         menu.run();
     }
