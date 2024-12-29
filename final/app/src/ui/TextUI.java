@@ -185,9 +185,26 @@ public class TextUI {
                 "Gerar horários automáticamente"
         });
 
-        //menu.setHandler(1, ()->this.model.inicializacaoSalasUCsTurnos());
+        menu.setHandler(1, this::gerarHorarios);
 
         menu.run();
+    }
+
+    private void gerarHorarios() {
+        int semestre;
+        System.out.println("Insira o semestre atual (1 ou 2): ");
+        String s = scin.nextLine();
+        try {
+            semestre = Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            System.out.println("Semestre inválido!");
+            return;
+        }
+        if (semestre != 1 && semestre != 2) {
+            System.out.println("Semestre inválido!");
+            return;
+        }
+        this.model.gerarHorarios(semestre);
     }
 
     private void alocarAlunoAoTurno() {

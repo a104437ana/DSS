@@ -10,6 +10,7 @@ public interface ISSHorarios {
     boolean existeUC(String codUC);
     void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno);
     void removerAlunoDoTurno(String codAluno, String codUC, String codTurno);
+    void gerarHorarios(int semestre);
 
     /**
      * Importa alunos e suas inscrições a partir de um arquivo CSV combinado.
@@ -22,7 +23,7 @@ public interface ISSHorarios {
     /**
      * Método que remove inscrições da UC.
      */
-    void removerTodasInscricoes();
+    //void removerTodasInscricoes();
 
     /**
      * Método que remove todos os alunos.

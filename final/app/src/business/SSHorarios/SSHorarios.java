@@ -41,6 +41,10 @@ public class SSHorarios implements ISSHorarios {
         //t.putAluno(a);
         //a.putTurno(t);
     }
+
+    public void gerarHorarios(int semestre) {
+        return;
+    }
     public void removerAlunoDoTurno(String codAluno, String codUC, String codTurno) {
         return;
     }
@@ -145,17 +149,21 @@ public class SSHorarios implements ISSHorarios {
     /**
      * Método que remove inscrições da UC.
      */
-    public void removerTodasInscricoes() {
+    /**public void removerTodasInscricoes() {
         List<UC> ucs = new ArrayList<>(this.ucsDAO.getAll());
         for (UC uc : ucs) {
             uc.removerInscricoes();
         }
-    }
+    }*/
 
     /**
      * Método que remove todos os alunos.
      */
     public void removerAlunos() {
+        List<UC> ucs = new ArrayList<>(this.ucsDAO.getAll());
+        for (UC uc : ucs) {
+            uc.removerInscricoes();
+        }
         this.alunosDAO.deleteAllAlunos();
     }
 

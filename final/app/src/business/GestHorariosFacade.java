@@ -8,6 +8,8 @@ import business.SSUtilizadores.SSUtilizadores;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.io.File;
+import java.io.IOException;
 
 public class GestHorariosFacade implements IGestHorariosLN{
     private ISSUtilizadores utilizadores;
@@ -33,6 +35,10 @@ public class GestHorariosFacade implements IGestHorariosLN{
     public void removerAlunoDoTurno(String codAluno, String codUC, String codTurno) {
         this.horarios.removerAlunoDoTurno(codAluno,codUC,codTurno);
     }
+
+    public void gerarHorarios(int semestre) {
+        this.horarios.gerarHorarios(semestre);
+    }
     /**
      * Importa utilizadores, alunos e suas inscrições de dois arquivos CSV.
      *
@@ -41,8 +47,17 @@ public class GestHorariosFacade implements IGestHorariosLN{
     public void importarAlunos(String ficheiro) {
         try {
 
+            File arquivo = new File(ficheiro);
+            // Verifica se o arquivo existe e pode ser lido
+            if (!arquivo.exists()) {
+                throw new IOException("Ficheiro não existe.");
+            }
+            if (!arquivo.canRead()) {
+                throw new IOException("Erro ao ler o ficheiro.");
+            }
+
             // Remover inscrições e alunos antigos
-            this.horarios.removerTodasInscricoes();
+            //this.horarios.removerTodasInscricoes();
             this.horarios.removerAlunos();
 
             // Importar alunos
@@ -56,7 +71,7 @@ public class GestHorariosFacade implements IGestHorariosLN{
             System.out.println("Utilizadores importados com sucesso.");
 
 
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println("Erro durante a importação: " + e.getMessage());
         }
     }

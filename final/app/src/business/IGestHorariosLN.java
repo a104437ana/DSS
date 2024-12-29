@@ -6,6 +6,7 @@ public interface IGestHorariosLN {
     boolean existeUC(String codUC);
     void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno);
     void removerAlunoDoTurno(String codAluno, String codUC, String codTurno);
+    void gerarHorarios(int semestre);
     /**
      * Importa utilizadores, alunos e suas inscrições de dois arquivos CSV.
      *
