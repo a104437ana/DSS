@@ -48,6 +48,8 @@ public class SSUtilizadores implements ISSUtilizadores {
                 this.utilizadoresDAO.putAll(novosUtilizadores);
             }
 
+            utilizadoresExistentes.remove("admin");
+
             // Remover os utilizadores que não estão mais no mapa, ou seja aqueles que não foram atualziados
             if (!utilizadoresExistentes.isEmpty()) {
                 utilizadoresDAO.removerLista(utilizadoresExistentes);

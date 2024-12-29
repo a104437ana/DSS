@@ -58,11 +58,7 @@ public class SSHorarios implements ISSHorarios {
                     aluno = new AlunoEstatutoEspecial(codAluno, nome, media);
                 }
 
-                // Adiciona aluno à lista de alunos
-                alunos.add(aluno);
-
-                // Adicionar o aluno ao mapa de senhas
-                alunoSenhaMap.put(codAluno, senha);
+                boolean isAluno = false;
 
                 // Processar inscrições (após os primeiros 5 campos)
                 for (int i = 5; i < atributos.length; i += 2) {
@@ -72,6 +68,14 @@ public class SSHorarios implements ISSHorarios {
                     }
 
                     String codUC = atributos[i];
+
+                    // Verifica que existe a UC
+                    UC uc = this.ucsDAO.get(codUC);
+                    if (uc == null) {
+                        System.err.println("UC não encontrada para código: " + codUC);
+                        continue;
+                    }
+
                     int nInscricao;
                     try {
                         nInscricao = Integer.parseInt(atributos[i + 1]);
@@ -80,10 +84,19 @@ public class SSHorarios implements ISSHorarios {
                         continue;
                     }
 
+                    isAluno = true;
                     // Adicionar a inscrição ao mapa
                     inscricoesPorUC
                             .computeIfAbsent(codUC, k -> new ArrayList<>())
                             .add(new Inscricao(codAluno, nInscricao));
+                }
+
+                if (isAluno) {
+                    // Adiciona aluno à lista de alunos
+                    alunos.add(aluno);
+
+                    // Adicionar o aluno ao mapa de senhas
+                    alunoSenhaMap.put(codAluno, senha);
                 }
             }
 
@@ -95,13 +108,9 @@ public class SSHorarios implements ISSHorarios {
                 String codUC = entry.getKey();
                 List<Inscricao> inscricoes = entry.getValue();
 
-                // Verifica que existe a UC
                 UC uc = this.ucsDAO.get(codUC);
-                if (uc != null) {
-                    uc.adicionarInscricoes(inscricoes);
-                } else {
-                    System.err.println("UC não encontrada para código: " + codUC);
-                }
+                uc.adicionarInscricoes(inscricoes);
+
             }
 
         } catch (IOException e) {
