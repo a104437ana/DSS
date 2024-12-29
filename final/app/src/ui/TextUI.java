@@ -70,10 +70,9 @@ public class TextUI {
      */
     private void menuPrincipalAdmin(String user) {
         Menu menu = new Menu(new String[]{
-                "Importar alunos",
-                "Alocar aluno ao turno de uma UC",
-                "Remover aluno do turno de uma UC ",
-                "Gerar horários automáticamente"
+                "Importação",
+                "Atribuição manual dos alunos aos turnos",
+                "Atribuição automática dos alunos aos turnos"
                 //"Operações de Listagem",
 //                "Definição das Preferências e Limites",
 //                "Criação e Gestão de Horários de Alunos",
@@ -82,6 +81,8 @@ public class TextUI {
         });
 
         menu.setHandler(1, this::menuImport);
+        menu.setHandler(2, this::menuManual);
+        menu.setHandler(3, this::menuAuto);
        // menu.setHandler(2, this::menuListagem);
 //        menu.setHandler(3, this::menuDefinirPrefLim);
 //        menu.setHandler(4, this::menuGestaoHorario);
@@ -158,11 +159,33 @@ public class TextUI {
     private void menuImport() {
         Menu menu = new Menu(new String[]{
                 "Preencher Salas, UCs e Turnos",
-                "Importar Alunos e Inscrições"
+                "Importar Alunos"
         });
 
         menu.setHandler(1, ()->this.model.inicializacaoSalasUCsTurnos());
         menu.setHandler(2, this::importarAlunos);
+
+        menu.run();
+    }
+
+    private void menuManual() {
+        Menu menu = new Menu(new String[]{
+                "Alocar aluno ao turno de uma UC",
+                "Remover aluno do turno de uma UC"
+        });
+
+        //menu.setHandler(1, ()->this.model.inicializacaoSalasUCsTurnos());
+        //menu.setHandler(2, this::importarAlunos);
+
+        menu.run();
+    }
+
+    private void menuAuto() {
+        Menu menu = new Menu(new String[]{
+                "Gerar horários automáticamente"
+        });
+
+        //menu.setHandler(1, ()->this.model.inicializacaoSalasUCsTurnos());
 
         menu.run();
     }
