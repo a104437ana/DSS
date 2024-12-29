@@ -344,5 +344,51 @@ public class AlunoDAO {
         }
         return alunosMap;
     }
+
+    public void putAlunoTurno(String codAluno, String idTurno) {
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             PreparedStatement pstm = conn.prepareStatement(
+                     "INSERT INTO turnosdoaluno (codAluno, idTurno) VALUES (?, ?) ")
+        ) {
+            pstm.setString(1, codAluno);
+            pstm.setString(2, idTurno);
+            pstm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao inserir aluno no turno " + e.getMessage());
+        }
+    }
+
+    public void removeAlunoTurno(String codAluno, String idTurno) {
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             PreparedStatement pstm = conn.prepareStatement(
+                     "DELETE FROM turnosdoaluno WHERE codAluno=? AND idTurno=?")
+        ) {
+            pstm.setString(1, codAluno);
+            pstm.setString(2, idTurno);
+            pstm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao remover aluno do turno " + e.getMessage());
+        }
+    }
+
+    public boolean existeAlunoTurno(String codAluno, String idTurno) {
+        boolean r = false;
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             PreparedStatement pstm = conn.prepareStatement(
+                     "SELECT codAluno FROM turnosdoaluno WHERE codAluno=? AND idTurno=?")
+        ) {
+            pstm.setString(1, codAluno);
+            pstm.setString(2, idTurno);
+            try (ResultSet rs = pstm.executeQuery()) {
+                r = rs.next();  // A chave existe na tabela
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao verificar se aluno está no turno " + e.getMessage());
+        }
+        return r;
+    }
 }
 

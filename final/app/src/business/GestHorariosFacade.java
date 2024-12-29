@@ -44,6 +44,10 @@ public class GestHorariosFacade implements IGestHorariosLN{
         return this.horarios.alunoTemConflito(codAluno,codTurno,codUC);
     }
 
+    public boolean alunoTemTurno(String codAluno, String codTurno, String codUC) {
+        return this.horarios.alunoTemTurno(codAluno,codTurno,codUC);
+    }
+
     public void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno) {
         this.horarios.alocarAlunoAoTurno(codAluno,codUC,codTurno);
     }

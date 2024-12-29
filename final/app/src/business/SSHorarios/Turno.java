@@ -119,6 +119,18 @@ public abstract class Turno implements Comparable<Turno> {
         return this.alunoDAO.sizeByTurno(this.idTurno);
     }
 
+    public void putAluno(String codAluno) {
+        this.alunoDAO.putAlunoTurno(codAluno,idTurno);
+    }
+
+    public void removeAluno(String codAluno) {
+        this.alunoDAO.removeAlunoTurno(codAluno,idTurno);
+    }
+
+    public boolean existeAluno(String codAluno) {
+        return this.alunoDAO.existeAlunoTurno(codAluno,idTurno);
+    }
+
     /**
      * Método abstrato para obter o tipo de turno (Teórico, Teórico-Prático, Prático-Laboratorial).
      *

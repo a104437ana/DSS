@@ -69,21 +69,25 @@ public class SSHorarios implements ISSHorarios {
         return false;
     }
 
+    public boolean alunoTemTurno(String codAluno, String codTurno, String codUC) {
+        UC uc = this.ucsDAO.get(codUC);
+        Turno t = uc.getTurno(codTurno);
+        return t.existeAluno(codAluno);
+    }
+
     public void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno) {
         UC uc = this.ucsDAO.get(codUC);
-        if (uc == null) return;
-        String idTurno = codTurno.concat(codUC);
-        //Turno t = uc.getTurno(idTurno);
-        //if (t == null) return;
-        //Aluno a = this.alunosDAO.get(codAluno);
-        //if (a == null) return;
-        //t.putAluno(codAluno);
+        Turno t = uc.getTurno(codTurno);
+        t.putAluno(codAluno);
+    }
+
+    public void removerAlunoDoTurno(String codAluno, String codUC, String codTurno) {
+        UC uc = this.ucsDAO.get(codUC);
+        Turno t = uc.getTurno(codTurno);
+        t.removeAluno(codAluno);
     }
 
     public void gerarHorarios(int semestre) {
-        return;
-    }
-    public void removerAlunoDoTurno(String codAluno, String codUC, String codTurno) {
         return;
     }
     /**

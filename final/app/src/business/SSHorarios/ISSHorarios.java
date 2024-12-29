@@ -12,6 +12,7 @@ public interface ISSHorarios {
     boolean existeTurno(String codTurno, String codUC);
     boolean turnoTemEspaço(String codTurno, String codUC);
     boolean alunoTemConflito(String codAluno, String codTurno, String codUC);
+    boolean alunoTemTurno(String codAluno, String codTurno, String codUC);
     void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno);
     void removerAlunoDoTurno(String codAluno, String codUC, String codTurno);
     void gerarHorarios(int semestre);

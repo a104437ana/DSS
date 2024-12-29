@@ -230,6 +230,10 @@ public class TextUI {
             System.out.println("Turno não existe!");
             return;
         }
+        if (this.model.alunoTemTurno(codAluno,codTurno,codUC)) {
+            System.out.println("O aluno já está neste turno");
+            return;
+        }
         if (!this.model.turnoTemEspaço(codTurno,codUC)) {
             System.out.println("Turno não tem espaço suficiente!");
             System.out.println("Deseja alocar mesmo assim? (Y/n)");
@@ -284,6 +288,10 @@ public class TextUI {
         String codTurno = scin.nextLine();
         if (!this.model.existeTurno(codTurno,codUC)) {
             System.out.println("Turno não existe!");
+            return;
+        }
+        if (!this.model.alunoTemTurno(codAluno,codTurno,codUC)) {
+            System.out.println("O aluno não está neste turno");
             return;
         }
         this.model.removerAlunoDoTurno(codAluno,codUC,codTurno);
