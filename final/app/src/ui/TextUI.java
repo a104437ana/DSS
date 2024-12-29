@@ -98,11 +98,19 @@ public class TextUI {
                 "Minha Conta"
         });
 
-        menu.setHandler(1, ()->this.model.consultarHorario(user));
+        menu.setHandler(1, ()->this.printHorario(user));
         menu.setHandler(1, ()->this.menuConta(user));
 
         menu.run();
     }
+
+    /**
+     * Mostrar horário de aluno
+     */
+    private void printHorario(String user) {
+        System.out.println(this.model.consultarHorario(user));
+    }
+
 
     /**
      * Estado - Menu Definir preferências e limites

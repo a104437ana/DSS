@@ -131,6 +131,7 @@ public class Aluno {
      */
     public String getStringHorario() {
         StringBuilder res = new StringBuilder();
+        res.append("Horário do aluno ").append(this.codAluno).append("\n");
 
         Map<DiaSemana, List<Turno>> horario = new HashMap<>(this.getHorario());
 
