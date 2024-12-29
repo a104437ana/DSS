@@ -18,6 +18,21 @@ public class GestHorariosFacade implements IGestHorariosLN{
         this.horarios = new SSHorarios();
     }
 
+    public boolean existeAluno(String codAluno) {
+        return this.horarios.existeAluno(codAluno);
+    }
+
+    public boolean existeUC(String codUC) {
+        return this.horarios.existeUC(codUC);
+    }
+
+    public void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno) {
+        this.horarios.alocarAlunoAoTurno(codAluno,codUC,codTurno);
+    }
+
+    public void removerAlunoDoTurno(String codAluno, String codUC, String codTurno) {
+        this.horarios.removerAlunoDoTurno(codAluno,codUC,codTurno);
+    }
     /**
      * Importa utilizadores, alunos e suas inscrições de dois arquivos CSV.
      *

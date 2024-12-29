@@ -174,8 +174,8 @@ public class TextUI {
                 "Remover aluno do turno de uma UC"
         });
 
-        //menu.setHandler(1, ()->this.model.inicializacaoSalasUCsTurnos());
-        //menu.setHandler(2, this::importarAlunos);
+        menu.setHandler(1, this::alocarAlunoAoTurno);
+        menu.setHandler(2, this::removerAlunoDoTurno);
 
         menu.run();
     }
@@ -188,6 +188,42 @@ public class TextUI {
         //menu.setHandler(1, ()->this.model.inicializacaoSalasUCsTurnos());
 
         menu.run();
+    }
+
+    private void alocarAlunoAoTurno() {
+        System.out.println("Insira o código de aluno: ");
+        String codAluno = scin.nextLine();
+        if (!this.model.existeAluno(codAluno)) {
+            System.out.println("Aluno não existe!");
+            return;
+        }
+        System.out.println("Insira o código da UC: ");
+        String codUC = scin.nextLine();
+        if (!this.model.existeUC(codUC)) {
+            System.out.println("UC não existe!");
+            return;
+        }
+        System.out.println("Insira o código do turno: ");
+        String codTurno = scin.nextLine();
+        this.model.alocarAlunoAoTurno(codAluno,codUC,codTurno);
+    }
+
+    private void removerAlunoDoTurno() {
+        System.out.println("Insira o código de aluno: ");
+        String codAluno = scin.nextLine();
+        if (!this.model.existeAluno(codAluno)) {
+            System.out.println("Aluno não existe!");
+            return;
+        }
+        System.out.println("Insira o código da UC: ");
+        String codUC = scin.nextLine();
+        if (!this.model.existeUC(codUC)) {
+            System.out.println("UC não existe!");
+            return;
+        }
+        System.out.println("Insira o código do turno: ");
+        String codTurno = scin.nextLine();
+        this.model.removerAlunoDoTurno(codAluno,codUC,codTurno);
     }
 
     private void importarAlunos() {

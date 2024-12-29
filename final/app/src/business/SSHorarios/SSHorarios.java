@@ -22,6 +22,28 @@ public class SSHorarios implements ISSHorarios {
         this.alunosDAO = AlunoDAO.getInstance();
     }
 
+    public boolean existeAluno(String codAluno) {
+        return this.alunosDAO.existeAluno(codAluno);
+    }
+
+    public boolean existeUC(String codUC) {
+        return this.ucsDAO.existeUC(codUC);
+    }
+
+    public void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno) {
+        UC uc = this.ucsDAO.get(codUC);
+        if (uc == null) return;
+        String idTurno = codTurno.concat(codUC);
+        //Turno t = uc.getTurno(idTurno);
+        //if (t == null) return;
+        Aluno a = this.alunosDAO.get(codAluno);
+        if (a == null) return;
+        //t.putAluno(a);
+        //a.putTurno(t);
+    }
+    public void removerAlunoDoTurno(String codAluno, String codUC, String codTurno) {
+        return;
+    }
     /**
      * Importa alunos e suas inscrições a partir de um arquivo CSV combinado.
      *

@@ -1,6 +1,11 @@
 package business;
 
 public interface IGestHorariosLN {
+
+    boolean existeAluno(String codAluno);
+    boolean existeUC(String codUC);
+    void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno);
+    void removerAlunoDoTurno(String codAluno, String codUC, String codTurno);
     /**
      * Importa utilizadores, alunos e suas inscrições de dois arquivos CSV.
      *

@@ -6,6 +6,10 @@ import java.util.Map;
 
 public interface ISSHorarios {
 
+    boolean existeAluno(String codAluno);
+    boolean existeUC(String codUC);
+    void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno);
+    void removerAlunoDoTurno(String codAluno, String codUC, String codTurno);
 
     /**
      * Importa alunos e suas inscrições a partir de um arquivo CSV combinado.
