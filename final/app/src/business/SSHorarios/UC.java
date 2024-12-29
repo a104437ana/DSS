@@ -80,6 +80,11 @@ public class UC {
     }
 
     // Métodos dos DAOs Associados
+
+    public Turno getTurno(String codTurno) {
+        String idTurno = codTurno.concat(codUC);
+        return this.turnoDAO.get(idTurno);
+    }
     /**
      * Método que devolve os turnos da UC.
      *
@@ -123,7 +128,14 @@ public class UC {
         return this.inscritoDAO.getByUC(this.codUC);
     }
 
+    public boolean alunoInscrito(String codAluno) {
+        return this.inscritoDAO.alunoInscritoNaUC(codAluno,codUC);
+    }
 
+    public boolean existeTurno(String codTurno) {
+        String idTurno = codTurno.concat(codUC);
+        return this.turnoDAO.existeTurno(idTurno);
+    }
     /**
      * Representação em String da UC.
      *

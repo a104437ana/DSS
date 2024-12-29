@@ -220,8 +220,46 @@ public class TextUI {
             System.out.println("UC não existe!");
             return;
         }
+        if (!this.model.alunoInscritoNaUC(codAluno,codUC)) {
+            System.out.println("O aluno não está inscrito nesta UC!");
+            return;
+        }
         System.out.println("Insira o código do turno: ");
         String codTurno = scin.nextLine();
+        if (!this.model.existeTurno(codTurno,codUC)) {
+            System.out.println("Turno não existe!");
+            return;
+        }
+        if (!this.model.turnoTemEspaço(codTurno,codUC)) {
+            System.out.println("Turno não tem espaço suficiente!");
+            System.out.println("Deseja alocar mesmo assim? (Y/n)");
+            while(true) {
+                String s = scin.nextLine();
+                if (s.equals("Y")) break;
+                else {
+                    if (s.equals("n")) return;
+                    else {
+                        System.out.println("Resposta inválida! Tente novamente.");
+                        System.out.println("Deseja alocar mesmo assim? (Y/n)");
+                    }
+                }
+            }
+        }
+        if (this.model.alunoTemConflito(codAluno,codTurno,codUC)) {
+            System.out.println("Aluno já está noutros turnos á mesma hora e no mesmo dia que o Turno atual!");
+            System.out.println("Deseja alocar mesmo assim? (Y/n)");
+            while(true) {
+                String s = scin.nextLine();
+                if (s.equals("Y")) break;
+                else {
+                    if (s.equals("n")) return;
+                    else {
+                        System.out.println("Resposta inválida! Tente novamente.");
+                        System.out.println("Deseja alocar mesmo assim? (Y/n)");
+                    }
+                }
+            }
+        }
         this.model.alocarAlunoAoTurno(codAluno,codUC,codTurno);
     }
 
@@ -238,8 +276,16 @@ public class TextUI {
             System.out.println("UC não existe!");
             return;
         }
+        if (!this.model.alunoInscritoNaUC(codAluno,codUC)) {
+            System.out.println("O aluno não está inscrito nesta UC!");
+            return;
+        }
         System.out.println("Insira o código do turno: ");
         String codTurno = scin.nextLine();
+        if (!this.model.existeTurno(codTurno,codUC)) {
+            System.out.println("Turno não existe!");
+            return;
+        }
         this.model.removerAlunoDoTurno(codAluno,codUC,codTurno);
     }
 

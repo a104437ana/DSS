@@ -4,6 +4,10 @@ public interface IGestHorariosLN {
 
     boolean existeAluno(String codAluno);
     boolean existeUC(String codUC);
+    boolean alunoInscritoNaUC(String codAluno, String codUC);
+    boolean existeTurno(String codTurno, String codUC);
+    boolean turnoTemEspaço(String codTurno, String codUC);
+    boolean alunoTemConflito(String codAluno, String codTurno, String codUC);
     void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno);
     void removerAlunoDoTurno(String codAluno, String codUC, String codTurno);
     void gerarHorarios(int semestre);

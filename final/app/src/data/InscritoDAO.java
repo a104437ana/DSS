@@ -163,5 +163,22 @@ public class InscritoDAO {
         }
         return inscricoes;
     }
+
+    public boolean alunoInscritoNaUC(String codAluno, String codUC) {
+        boolean r = false;
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             PreparedStatement pstm = conn.prepareStatement("SELECT codUC FROM inscricoes WHERE codAluno=? AND codUC=?")) {
+            pstm.setString(1, codAluno);
+            pstm.setString(2, codUC);
+            try (ResultSet rs = pstm.executeQuery()) {
+                r = rs.next();  // A chave existe na tabela
+            }
+        } catch (SQLException e) {
+            // Database error!
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar inscrição de um aluno numa UC: " + e.getMessage());
+        }
+        return r;
+    }
 }
 

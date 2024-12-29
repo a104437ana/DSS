@@ -28,6 +28,22 @@ public class GestHorariosFacade implements IGestHorariosLN{
         return this.horarios.existeUC(codUC);
     }
 
+    public boolean alunoInscritoNaUC(String codAluno, String codUC) {
+        return this.horarios.alunoInscritoNaUC(codAluno,codUC);
+    }
+
+    public boolean existeTurno(String codTurno, String codUC) {
+        return this.horarios.existeTurno(codTurno,codUC);
+    }
+
+    public boolean turnoTemEspaço(String codTurno, String codUC) {
+        return this.horarios.turnoTemEspaço(codTurno,codUC);
+    }
+
+    public boolean alunoTemConflito(String codAluno, String codTurno, String codUC) {
+        return this.horarios.alunoTemConflito(codAluno,codTurno,codUC);
+    }
+
     public void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno) {
         this.horarios.alocarAlunoAoTurno(codAluno,codUC,codTurno);
     }

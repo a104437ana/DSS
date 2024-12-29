@@ -67,6 +67,21 @@ public class TurnoDAO {
         return singleton;
     }
 
+    public boolean existeTurno(String idTurno) {
+        boolean r = false;
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             PreparedStatement pstm = conn.prepareStatement("SELECT idTurno FROM turnos WHERE idTurno=?")) {
+            pstm.setString(1, idTurno);
+            try (ResultSet rs = pstm.executeQuery()) {
+                r = rs.next();  // A chave existe na tabela
+            }
+        } catch (SQLException e) {
+            // Database error!
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao verificar código do aluno: " + e.getMessage());
+        }
+        return r;
+    }
     /**
      * Obtém um turno pelo código.
      *

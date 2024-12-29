@@ -7,6 +7,7 @@ import data.UCDAO;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.*;
 
 public class SSHorarios implements ISSHorarios {
@@ -30,16 +31,53 @@ public class SSHorarios implements ISSHorarios {
         return this.ucsDAO.existeUC(codUC);
     }
 
+    public boolean alunoInscritoNaUC(String codAluno,String codUC) {
+        UC uc = this.ucsDAO.get(codUC);
+        return uc.alunoInscrito(codAluno);
+    }
+
+    public boolean existeTurno(String codTurno, String codUC) {
+        UC uc = this.ucsDAO.get(codUC);
+        return uc.existeTurno(codTurno);
+    }
+
+    public boolean turnoTemEspaço(String codTurno, String codUC) {
+        UC uc = this.ucsDAO.get(codUC);
+        Turno t = uc.getTurno(codTurno);
+        int l = t.getLotacao();
+        int n = t.qtdAlunos();
+        if (n >= l) return false;
+        else return true;
+    }
+
+    public boolean alunoTemConflito(String codAluno, String codTurno, String codUC) {
+        UC uc = this.ucsDAO.get(codUC);
+        Turno t = uc.getTurno(codTurno);
+        DiaSemana dia = t.getDiaSemana();
+        LocalTime i = t.getHoraInicial();
+        LocalTime f = t.getHoraFinal();
+        Aluno a = this.alunosDAO.get(codAluno);
+        Map<String,List<Turno>> map = a.getTurnos();
+        List<Turno> l = map.get(String.valueOf(dia));
+        if (l != null) {
+            for (Turno turno : l) {
+                LocalTime ii = turno.getHoraInicial();
+                LocalTime ff = turno.getHoraFinal();
+                if (i.isBefore(ff) && f.isAfter(ii)) return true;
+            }
+        }
+        return false;
+    }
+
     public void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno) {
         UC uc = this.ucsDAO.get(codUC);
         if (uc == null) return;
         String idTurno = codTurno.concat(codUC);
         //Turno t = uc.getTurno(idTurno);
         //if (t == null) return;
-        Aluno a = this.alunosDAO.get(codAluno);
-        if (a == null) return;
-        //t.putAluno(a);
-        //a.putTurno(t);
+        //Aluno a = this.alunosDAO.get(codAluno);
+        //if (a == null) return;
+        //t.putAluno(codAluno);
     }
 
     public void gerarHorarios(int semestre) {
