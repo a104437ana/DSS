@@ -164,6 +164,55 @@ public class InscritoDAO {
         return inscricoes;
     }
 
+    /**
+     * Obtém todas as inscrições de uma UC.
+     *
+     * @param ucCod Código da UC.
+     * @return Map cuja chave é o aluno associado e valor é a inscrição com o seu número.
+     */
+    public Map<String, Inscricao> getMapByUC(String ucCod) {
+        Map<String, Inscricao> inscricoes = new HashMap<>();
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             PreparedStatement pstm = conn.prepareStatement("SELECT * FROM inscricoes WHERE codUC = ?")) {
+            pstm.setString(1, ucCod);
+            try (ResultSet rs = pstm.executeQuery()) {
+                while (rs.next()) {
+                    String alunoNum = rs.getString("codAluno");
+                    int nInscricao = rs.getInt("nInscricao");
+                    inscricoes.put(alunoNum,new Inscricao(alunoNum, nInscricao));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar inscrições por UC: " + e.getMessage());
+        }
+        return inscricoes;
+    }
+
+    /**
+     * Obtém todos os alunos de uma UC.
+     *
+     * @param ucCod Código da UC.
+     * @return Lista de códigos de alunos associados.
+     */
+    public List<String> getAlunos(String ucCod) {
+        List<String> alunos = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             PreparedStatement pstm = conn.prepareStatement("SELECT codAluno FROM inscricoes WHERE codUC = ?")) {
+            pstm.setString(1, ucCod);
+            try (ResultSet rs = pstm.executeQuery()) {
+                while (rs.next()) {
+                    String alunoNum = rs.getString("codAluno");
+                    alunos.add(alunoNum);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar alunos por UC: " + e.getMessage());
+        }
+        return alunos;
+    }
+
     public boolean alunoInscritoNaUC(String codAluno, String codUC) {
         boolean r = false;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);

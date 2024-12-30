@@ -19,7 +19,6 @@ public abstract class Turno implements Comparable<Turno> {
     private int lotacao;                // Lotação máxima do turno
     private String sala;                // Código da sala onde se localiza o turno
     private SalaDAO salasDAO;           // DAO das Salas
-    private AlunoDAO alunoDAO;          // DAO dos Alunos
 
     /**
      * Construtor para Turno.
@@ -40,7 +39,6 @@ public abstract class Turno implements Comparable<Turno> {
         this.lotacao = lotacao;
         this.sala = sala;
         this.salasDAO = SalaDAO.getInstance();
-        this.alunoDAO = AlunoDAO.getInstance();
     }
 
     // Getters e Setters
@@ -100,36 +98,6 @@ public abstract class Turno implements Comparable<Turno> {
         this.sala = sala;
     }
 
-    // Metodo dos DAOs
-    /**
-     * Método que devolve os alunos alocados no turno.
-     *
-     * @return Lista de alunos do turno.
-     */
-    public List<Aluno> getAlunosTurno() {
-        return new ArrayList<>(this.alunoDAO.getByTurno(this.idTurno));
-    }
-
-    /**
-     * Método que devolve o número de alunos alocados num turno.
-     *
-     * @return Inteiro com a quantidade de alunos do turno
-     */
-    public int qtdAlunos() {
-        return this.alunoDAO.sizeByTurno(this.idTurno);
-    }
-
-    public void putAluno(String codAluno) {
-        this.alunoDAO.putAlunoTurno(codAluno,idTurno);
-    }
-
-    public void removeAluno(String codAluno) {
-        this.alunoDAO.removeAlunoTurno(codAluno,idTurno);
-    }
-
-    public boolean existeAluno(String codAluno) {
-        return this.alunoDAO.existeAlunoTurno(codAluno,idTurno);
-    }
 
     /**
      * Método abstrato para obter o tipo de turno (Teórico, Teórico-Prático, Prático-Laboratorial).

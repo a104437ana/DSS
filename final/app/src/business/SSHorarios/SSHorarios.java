@@ -41,24 +41,48 @@ public class SSHorarios implements ISSHorarios {
         return uc.existeTurno(codTurno);
     }
 
-    public boolean turnoTemEspaço(String codTurno, String codUC) {
+    /**
+     * Verifica se um aluno está associado a um turno específico de uma uc.
+     *
+     * @param codTurno  Código do turno.
+     * @param codUC   Código da UC.
+     * @return True se o turno tem espaço (número de alunos do turno < lotação do turno), se não False.
+     */
+    public boolean turnoTemEspaco(String codTurno, String codUC) {
         UC uc = this.ucsDAO.get(codUC);
         Turno t = uc.getTurno(codTurno);
         int l = t.getLotacao();
-        int n = t.qtdAlunos();
-        if (n >= l) return false;
-        else return true;
+        int n = 0; // numero de alunos no turno
+
+        List<String> listaAlunos = uc.getAlunos();
+
+        // Percorrer a lista de alunos e seus turnos
+        for (String codAluno : listaAlunos) {
+            Aluno a = this.alunosDAO.get(codAluno);
+            if (a == null) continue; // Verifica se existe
+
+            Map<String, List<Turno>> turnosUCAluno = a.getTurnos();
+            List<Turno> listaTurnosAluno = turnosUCAluno.get(codUC); // A lista como valor do mapa
+            if (listaTurnosAluno == null) continue; // Cerifica se tem turnos
+
+            if (listaTurnosAluno.contains(t)) n++; // Se tiver esse turno adiciona ao número de alunos no turno 'n'
+        }
+
+        return n < l;
     }
 
     public boolean alunoTemConflito(String codAluno, String codTurno, String codUC) {
         UC uc = this.ucsDAO.get(codUC);
         Turno t = uc.getTurno(codTurno);
+
         DiaSemana dia = t.getDiaSemana();
         LocalTime i = t.getHoraInicial();
         LocalTime f = t.getHoraFinal();
+
         Aluno a = this.alunosDAO.get(codAluno);
         Map<String,List<Turno>> map = a.getTurnos();
         List<Turno> l = map.get(String.valueOf(dia));
+
         if (l != null) {
             for (Turno turno : l) {
                 LocalTime ii = turno.getHoraInicial();
@@ -69,27 +93,47 @@ public class SSHorarios implements ISSHorarios {
         return false;
     }
 
-    public boolean alunoTemTurno(String codAluno, String codTurno, String codUC) {
-        UC uc = this.ucsDAO.get(codUC);
-        Turno t = uc.getTurno(codTurno);
-        return t.existeAluno(codAluno);
+    /**
+     * Verifica se um aluno está associado a um turno específico de uma uc.
+     *
+     * @param codAluno Código do aluno.
+     * @param codTurno  Código do turno.
+     * @param codUC   Código da UC.
+     * @return True se o aluno está associado ao turno, se não False.
+     */
+    public boolean alunoTemTurno(String codAluno, String codUC, String codTurno) {
+        Aluno aluno = this.alunosDAO.get(codAluno);
+        return aluno.existeTurno(codUC, codTurno);
     }
 
+    /**
+     * Adiciona um aluno a um turno específico de uma UC.
+     *
+     * @param codAluno Código do aluno.
+     * @param codTurno  Código do turno.
+     * @param codUC    Código da UC.
+     */
     public void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno) {
-        UC uc = this.ucsDAO.get(codUC);
-        Turno t = uc.getTurno(codTurno);
-        t.putAluno(codAluno);
+        Aluno aluno = this.alunosDAO.get(codAluno);
+        aluno.putTurno(codUC, codTurno);
     }
 
+    /**
+     * Remove um aluno de um turno específico de uma UC.
+     *
+     * @param codAluno Código do aluno.
+     * @param codTurno  Código do turno.
+     * @param codUC     Código da UC.
+     */
     public void removerAlunoDoTurno(String codAluno, String codUC, String codTurno) {
-        UC uc = this.ucsDAO.get(codUC);
-        Turno t = uc.getTurno(codTurno);
-        t.removeAluno(codAluno);
+        Aluno aluno = this.alunosDAO.get(codAluno);
+        aluno.removeTurno(codUC, codTurno);
     }
 
     public void gerarHorarios(int semestre) {
         return;
     }
+
     /**
      * Importa alunos e suas inscrições a partir de um arquivo CSV combinado.
      *
@@ -191,12 +235,12 @@ public class SSHorarios implements ISSHorarios {
     /**
      * Método que remove inscrições da UC.
      */
-    /**public void removerTodasInscricoes() {
+    public void removerTodasInscricoes() {
         List<UC> ucs = new ArrayList<>(this.ucsDAO.getAll());
         for (UC uc : ucs) {
             uc.removerInscricoes();
         }
-    }*/
+    }
 
     /**
      * Método que remove todos os alunos.

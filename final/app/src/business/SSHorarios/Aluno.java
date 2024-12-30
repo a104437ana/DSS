@@ -91,6 +91,40 @@ public class Aluno {
         return "Nenhum";
     }
 
+    /*-------------- OUTROS MÉTODOS DAOS ------------*/
+
+    /**
+     * Adiciona um aluno a um turno específico de uma UC.
+     *
+     * @param codTurno  Código do turno.
+     * @param codUC     Código da UC.
+     */
+    public void putTurno(String codUC, String codTurno) {
+        this.turnos.putAlunoTurno(this.codAluno,codUC,codTurno);
+    }
+
+    /**
+     * Remove um aluno de um turno específico de uma UC.
+     *
+     * @param codTurno  Código do turno.
+     * @param codUC     Código da UC.
+     */
+    public void removeTurno(String codUC, String codTurno) {
+        this.turnos.removeAlunoTurno(this.codAluno, codUC, codTurno);
+    }
+
+    /**
+     * Verifica se um aluno está associado a um turno específico de uma uc.
+     *
+     * @param codTurno  Código do turno.
+     * @param codUC     Código da UC.
+     * @return True se o aluno está associado ao turno, se não False.
+     */
+    public boolean existeTurno(String codUC, String codTurno) {
+        return this.turnos.existeAlunoTurno(this.codAluno, codUC, codTurno);
+    }
+
+
     /**
      * Retorna os turnos do aluno agrupados por UC.
      *
@@ -132,9 +166,11 @@ public class Aluno {
      */
     public String getStringHorario() {
         StringBuilder res = new StringBuilder();
+        Map<DiaSemana, List<Turno>> horario = new HashMap<>(this.getHorario());
+        if (horario.isEmpty()) return null; // verifica se é vazio
+
         res.append("Horário do aluno ").append(this.codAluno).append("\n");
 
-        Map<DiaSemana, List<Turno>> horario = new HashMap<>(this.getHorario());
 
         List<DiaSemana> dias = new ArrayList<>();
         dias.add(DiaSemana.SEGUNDA);
@@ -150,7 +186,7 @@ public class Aluno {
             if (turnosDia == null) continue;
             for (Turno t : turnosDia) {
                 res.append("    ").append(t.getHoraInicial()).append("-").append(t.getHoraFinal())
-                    .append(" -> Turno").append(t.getIdTurno()).append(" da UC ").append(t.getCodUC()).append(";\n");
+                    .append(" -> Turno ").append(t.getIdTurno()).append(" da UC '").append(t.getCodUC()).append("';\n");
             }
         }
         return res.toString();
