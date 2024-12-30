@@ -1,6 +1,6 @@
 package business.SSHorarios;
 
-public enum Pref {
+public enum Preferência {
     NENHUM,
     INSCRICAO,
     MEDIA,

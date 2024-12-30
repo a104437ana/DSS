@@ -9,7 +9,7 @@ import data.AlunoDAO;
 public class Inscricao {
     private String codAluno;  // Identificador do aluno
     private int nInscricao;  // Número da inscrição
-    private AlunoDAO alunos;
+    private AlunoDAO aluno;
 
     /**
      * Construtor para criar uma inscrição.
@@ -20,7 +20,7 @@ public class Inscricao {
     public Inscricao(String codAluno, int nInscricao) {
         this.codAluno = codAluno;
         this.nInscricao = nInscricao;
-        this.alunos = AlunoDAO.getInstance();
+        this.aluno = AlunoDAO.getInstance();
     }
 
     public String getCodAluno() {
@@ -41,7 +41,7 @@ public class Inscricao {
 
     // Método de DAO
     public Aluno getAluno(){
-        return this.alunos.get(this.codAluno);
+        return this.aluno.get(this.codAluno);
     }
 
     @Override

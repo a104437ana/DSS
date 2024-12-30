@@ -49,10 +49,6 @@ public interface ISSHorarios {
      */
     Map<String, String> importarAlunos(String ficheiro);
 
-    /**
-     * Método que remove inscrições da UC.
-     */
-    void removerTodasInscricoes();
 
     /**
      * Método que remove todos os alunos.

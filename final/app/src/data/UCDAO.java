@@ -1,6 +1,6 @@
 package data;
 
-import business.SSHorarios.Pref;
+import business.SSHorarios.Preferência;
 import business.SSHorarios.UC;
 
 import java.sql.*;
@@ -264,7 +264,7 @@ public class UCDAO {
                     String nome = rs.getString("nome");
                     int semestre = rs.getInt("semestre");
                     boolean opcional = rs.getBoolean("opcional");
-                    Pref preferencia = Pref.valueOf(rs.getString("preferencia"));
+                    Preferência preferencia = Preferência.valueOf(rs.getString("preferencia"));
 
                     uc = new UC(cod, nome, semestre, opcional, preferencia);
                 }
@@ -291,7 +291,7 @@ public class UCDAO {
                 String nome = rs.getString("nome");
                 int semestre = rs.getInt("semestre");
                 boolean opcional = rs.getBoolean("opcional");
-                Pref preferencia = Pref.valueOf(rs.getString("preferencia"));
+                Preferência preferencia = Preferência.valueOf(rs.getString("preferencia"));
 
                 UC uc = new UC(cod, nome, semestre, opcional, preferencia);
                 ucs.add(uc);
@@ -318,7 +318,7 @@ public class UCDAO {
                 String nome = rs.getString("nome");
                 int semestre = rs.getInt("semestre");
                 boolean opcional = rs.getBoolean("opcional");
-                Pref preferencia = Pref.valueOf(rs.getString("preferencia"));
+                Preferência preferencia = Preferência.valueOf(rs.getString("preferencia"));
 
                 UC uc = new UC(cod, nome, semestre, opcional, preferencia);
                 ucs.put(cod, uc);

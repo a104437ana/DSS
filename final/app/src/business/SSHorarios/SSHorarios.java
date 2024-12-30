@@ -233,16 +233,6 @@ public class SSHorarios implements ISSHorarios {
     }
 
     /**
-     * Método que remove inscrições da UC.
-     */
-    public void removerTodasInscricoes() {
-        List<UC> ucs = new ArrayList<>(this.ucsDAO.getAll());
-        for (UC uc : ucs) {
-            uc.removerInscricoes();
-        }
-    }
-
-    /**
      * Método que remove todos os alunos.
      */
     public void removerAlunos() {

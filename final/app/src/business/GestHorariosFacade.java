@@ -101,7 +101,6 @@ public class GestHorariosFacade implements IGestHorariosLN{
             }
 
             // Remover inscrições e alunos antigos
-            this.horarios.removerTodasInscricoes();
             this.horarios.removerAlunos();
 
             // Importar alunos

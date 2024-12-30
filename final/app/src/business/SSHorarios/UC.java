@@ -15,7 +15,7 @@ public class UC {
     private String nome;                // Nome da unidade curricular
     private int semestre;               // Semestre em que a unidade curricular é lecionada
     private boolean opcional;           // Indica se a unidade curricular é opcional
-    private Pref preferencia;           // Preferência associada à unidade curricular
+    private Preferência preferencia;           // Preferência associada à unidade curricular
     private TurnoDAO turnoDAO;          // DAO dos turnos
     private InscritoDAO inscritoDAO;    // DAO dos inscritos
 
@@ -29,7 +29,7 @@ public class UC {
      * @param opcional    Indicador de se a UC é opcional
      * @param preferencia Preferência da UC
      */
-    public UC(String codUC, String nome, int semestre, boolean opcional, Pref preferencia) {
+    public UC(String codUC, String nome, int semestre, boolean opcional, Preferência preferencia) {
         this.codUC = codUC;
         this.nome = nome;
         this.semestre = semestre;
@@ -72,11 +72,11 @@ public class UC {
         this.opcional = opcional;
     }
 
-    public Pref getPreferencia() {
+    public Preferência getPreferencia() {
         return this.preferencia;
     }
 
-    public void setPreferencia(Pref preferencia) {
+    public void setPreferencia(Preferência preferencia) {
         this.preferencia = preferencia;
     }
 
