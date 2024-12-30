@@ -72,8 +72,8 @@ public class TextUI {
         Menu menu = new Menu(new String[]{
                 "Importação",
                 "Atribuição manual dos alunos aos turnos",
-                "Atribuição automática dos alunos aos turnos"
-                //"Operações de Listagem",
+                "Atribuição automática dos alunos aos turnos",
+                "Operações de Listagem"
 //                "Definição das Preferências e Limites",
 //                "Criação e Gestão de Horários de Alunos",
 //                "Verificação de Conflitos e Problemas",
@@ -83,7 +83,7 @@ public class TextUI {
         menu.setHandler(1, this::menuImport);
         menu.setHandler(2, this::menuManual);
         menu.setHandler(3, this::menuAuto);
-       // menu.setHandler(2, this::menuListagem);
+        menu.setHandler(4, this::menuListagem);
 //        menu.setHandler(3, this::menuDefinirPrefLim);
 //        menu.setHandler(4, this::menuGestaoHorario);
 //        menu.setHandler(5, this::menuVerificar);
@@ -118,40 +118,27 @@ public class TextUI {
 
 
     /**
-     * Estado - Menu Definir preferências e limites
-     */
-    private void menuDefinirPrefLim() {
-        Menu menu = new Menu(new String[]{
-                "Definir Preferências de UC",
-                "Definir Limite de UC",
-                "Definir Preferências de Aluno com Estatuto"
-        });
-
-//        menu.setHandler(1, this::definirPrefUC);
-//        menu.setHandler(2, this::definirLimiteUC);
-//        menu.setHandler(3, this::definirPrefAlunoEstatuto);
-
-        menu.run();
-    }
-
-    /**
-     * Estado - Menu Operações de consulta e listagem
+     * Estado - Menu Operações de listagem e consulta
      */
     private void menuListagem() {
         Menu menu = new Menu(new String[]{
-                "Listar Informações de Aluno"//,
+                    "Consultar Horário de um Aluno"
+//                "Listar Informações de Aluno",
 //                "Listar Informações de UC",
 //                "Listar Informações de Turno",
 //                "Listar Informações de Sala"
         });
 
-        menu.setHandler(1, this::infoAluno);
+        menu.setHandler(1, this::consultarHorario);
+//        menu.setHandler(1, this::infoAluno);
 //        menu.setHandler(2, this::listarUC);
 //        menu.setHandler(3, this::listarTurno);
 //        menu.setHandler(4, this::listarSala);
 
         menu.run();
     }
+
+
 
     /**
      * Estado - Menu Importação e Exportação
@@ -168,6 +155,9 @@ public class TextUI {
         menu.run();
     }
 
+    /**
+     * Estado - Menu de alocação manual de alunos aos seus turnos
+     */
     private void menuManual() {
         Menu menu = new Menu(new String[]{
                 "Alocar aluno ao turno de uma UC",
@@ -180,6 +170,9 @@ public class TextUI {
         menu.run();
     }
 
+    /**
+     * Estado - Menu de alocação automática de alunos aos seus turnos
+     */
     private void menuAuto() {
         Menu menu = new Menu(new String[]{
                 "Gerar horários automáticamente"
@@ -190,6 +183,9 @@ public class TextUI {
         menu.run();
     }
 
+    /**
+     * Auxiliar - Gerar horário automático dos alunos
+     */
     private void gerarHorarios() {
         int semestre;
         System.out.println("Insira o semestre atual (1 ou 2): ");
@@ -207,6 +203,9 @@ public class TextUI {
         this.model.gerarHorarios(semestre);
     }
 
+    /**
+     * Auxiliar - Alocação manual de um aluno
+     */
     private void alocarAlunoAoTurno() {
         System.out.println("Insira o código de aluno: ");
         String codAluno = scin.nextLine();
@@ -230,11 +229,11 @@ public class TextUI {
             System.out.println("Turno não existe!");
             return;
         }
-        if (this.model.alunoTemTurno(codAluno,codTurno,codUC)) {
-            System.out.println("O aluno já está neste turno");
+        if (this.model.alunoTemTurno(codAluno,codUC,codTurno)) {
+            System.out.println("O aluno já está neste turno!");
             return;
         }
-        if (!this.model.turnoTemEspaço(codTurno,codUC)) {
+        if (!this.model.turnoTemEspaco(codTurno,codUC)) {
             System.out.println("Turno não tem espaço suficiente!");
             System.out.println("Deseja alocar mesmo assim? (Y/n)");
             while(true) {
@@ -267,6 +266,9 @@ public class TextUI {
         this.model.alocarAlunoAoTurno(codAluno,codUC,codTurno);
     }
 
+    /**
+     * Auxiliar - Remoção manual de um aluno
+     */
     private void removerAlunoDoTurno() {
         System.out.println("Insira o código de aluno: ");
         String codAluno = scin.nextLine();
@@ -297,6 +299,9 @@ public class TextUI {
         this.model.removerAlunoDoTurno(codAluno,codUC,codTurno);
     }
 
+    /**
+     * Auxiliar - Importação de alunos dado um ficheiro
+     */
     private void importarAlunos() {
         System.out.println("Insira o caminho do ficheiro de alunos a importar: ");
         System.out.println("Exemplo - src/csv/alunos.csv");
@@ -306,39 +311,24 @@ public class TextUI {
     }
 
     /**
-     * Estado - Menu Gestão de horários
+     * Auxiliar - Consultar horário de aluno
      */
-    private void menuGestaoHorario() {
-        Menu menu = new Menu(new String[]{
-                "Gerar Horário",
-                "Alocar Aluno a Turno",
-                "Remover Aluno de Turno"
-        });
+    private void consultarHorario() {
+        System.out.println("Insira o código de aluno a consultar: ");
+        String codAluno = scin.nextLine();
 
-//        menu.setHandler(1, this::gerarHorario);
-//        menu.setHandler(2, this::alocarAlunoTurno);
-//        menu.setHandler(3, this::removerAlunoTurno);
+        if (!this.model.existeAluno(codAluno)) { // Verificar se existe o aluno primeiro
+            System.out.println("O aluno não existe!");
+            return;
+        }
 
-        menu.run();
-    }
+        String horario = this.model.consultarHorario(codAluno);
+        if (horario == null) { // Verificar se tem turnos
+            System.out.println("O aluno ainda não tem horário!");
+            return;
+        }
 
-    /**
-     * Estado - Menu Verificação
-     */
-    private void menuVerificar() {
-        Menu menu = new Menu(new String[]{
-                "Verificar alunos com conflitos",
-                "Verificar preferências não respeitadas",
-                "Verificar alunos sem turno",
-                "Verificar turnos que ultrapassam limite"
-        });
-
-//        menu.setHandler(1, this::verificarConflitos);
-//        menu.setHandler(2, this::verificarPreferencias);
-//        menu.setHandler(3, this::verificarSemTurno);
-//        menu.setHandler(4, this::verificarTurnosLimite);
-
-        menu.run();
+        System.out.println(horario);
     }
 
     /**
@@ -354,16 +344,6 @@ public class TextUI {
         menu.setHandler(1, ()->this.redefinirSenha());
 
         menu.run();
-    }
-
-    /**
-     * Estado - Menu de listagem de detalhes de um dado aluno
-     */
-    private void infoAluno() {
-        System.out.println("Insira o número do aluno: ");
-        String num = scin.nextLine();
-
-
     }
 
     /**

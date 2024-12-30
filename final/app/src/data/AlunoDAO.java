@@ -30,9 +30,10 @@ public class AlunoDAO {
             sql = "CREATE TABLE IF NOT EXISTS turnosDoAluno (" +
                     "codAluno VARCHAR(10) NOT NULL, " +
                     "idTurno VARCHAR(10) NOT NULL, " +
-                    "PRIMARY KEY (codAluno, idTurno), " +
+                    "codUC VARCHAR(10) NOT NULL, " +
+                    "PRIMARY KEY (codAluno, idTurno, codUC), " +
                     "FOREIGN KEY (codAluno) REFERENCES alunos(codAluno), " +
-                    "FOREIGN KEY (idTurno) REFERENCES turnos(idTurno))";
+                    "FOREIGN KEY (idTurno, codUC) REFERENCES turnos(idTurno, codUC))";
             stm.executeUpdate(sql);
 
         } catch (SQLException e) {
@@ -103,6 +104,8 @@ public class AlunoDAO {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              Statement stm = conn.createStatement()) {
 
+            // Remover turnos associados aos aluno primeiro
+            stm.executeUpdate("DELETE FROM turnosdoaluno");
             // Executa comando para remover todos os alunos
             stm.executeUpdate("DELETE FROM alunos");
 
@@ -179,79 +182,6 @@ public class AlunoDAO {
                 }
             }
         }
-    }
-
-    /**
-     * Obtém todos os alunos inscritos em um turno específico.
-     *
-     * @param turnoCod Código do turno.
-     * @return Coleção de alunos inscritos no turno.
-     */
-    public Collection<Aluno> getByTurno(String turnoCod) {
-        Collection<Aluno> alunos = new ArrayList<>();
-        String sql = "SELECT a.codAluno, a.nome, a.media, a.estatuto " +
-                "FROM alunos a " +
-                "JOIN turnosDoAluno ta ON a.codAluno = ta.codAluno " +
-                "WHERE ta.idTurno = ?";
-
-        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-             PreparedStatement pstm = conn.prepareStatement(sql)) {
-
-            pstm.setString(1, turnoCod);
-
-            try (ResultSet rs = pstm.executeQuery()) {
-                while (rs.next()) {
-                    String numero = rs.getString("codAluno");
-                    String nome = rs.getString("nome");
-                    double media = rs.getDouble("media");
-                    String estatuto = rs.getString("estatuto");
-                    Aluno aluno;
-                    if (estatuto.equals("Nenhum")) {
-                        aluno = new Aluno(numero, nome, media);
-                    } else {
-                        aluno = new AlunoEstatutoEspecial(numero, nome, media);
-                    }
-                    alunos.add(aluno);
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao buscar alunos por turno: " + e.getMessage());
-        }
-
-        return alunos;
-    }
-
-    /**
-     * Obtém o número de alunos inscritos em um turno específico.
-     *
-     * @param turnoCod Código do turno.
-     * @return Número de alunos inscritos no turno.
-     */
-    public int sizeByTurno(String turnoCod) {
-        int size = 0;
-        String sql = "SELECT COUNT(*) AS total " +
-                "FROM turnosDoAluno " +
-                "WHERE idTurno = ?";
-
-        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-             PreparedStatement pstm = conn.prepareStatement(sql)) {
-
-            pstm.setString(1, turnoCod);
-
-            try (ResultSet rs = pstm.executeQuery()) {
-                if (rs.next()) {
-                    size = rs.getInt("total");
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao contar alunos por turno: " + e.getMessage());
-        }
-
-        return size;
     }
 
 
@@ -345,7 +275,7 @@ public class AlunoDAO {
         return alunosMap;
     }
 
-    public void putAlunoTurno(String codAluno, String idTurno) {
+    public void putAlunoTurno(String codAluno, String idTurno) { // REMOVER UNIDERICIONAL
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              PreparedStatement pstm = conn.prepareStatement(
                      "INSERT INTO turnosdoaluno (codAluno, idTurno) VALUES (?, ?) ")
@@ -359,7 +289,7 @@ public class AlunoDAO {
         }
     }
 
-    public void removeAlunoTurno(String codAluno, String idTurno) {
+    public void removeAlunoTurno(String codAluno, String idTurno) { // REMOVER UNIDERICIONAL
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              PreparedStatement pstm = conn.prepareStatement(
                      "DELETE FROM turnosdoaluno WHERE codAluno=? AND idTurno=?")
@@ -373,7 +303,7 @@ public class AlunoDAO {
         }
     }
 
-    public boolean existeAlunoTurno(String codAluno, String idTurno) {
+    public boolean existeAlunoTurno(String codAluno, String idTurno) { // REMOVER UNIDERICIONAL
         boolean r = false;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              PreparedStatement pstm = conn.prepareStatement(

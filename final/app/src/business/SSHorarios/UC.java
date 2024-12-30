@@ -5,6 +5,7 @@ import data.TurnoDAO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Classe que representa uma unidade curricular (UC).
@@ -82,8 +83,7 @@ public class UC {
     // Métodos dos DAOs Associados
 
     public Turno getTurno(String codTurno) {
-        String idTurno = codTurno.concat(codUC);
-        return this.turnoDAO.get(idTurno);
+        return this.turnoDAO.get(codTurno, this.codUC);
     }
     /**
      * Método que devolve os turnos da UC.
@@ -128,13 +128,30 @@ public class UC {
         return this.inscritoDAO.getByUC(this.codUC);
     }
 
+    /**
+     * Método que devolve as inscrições associadas à UC.
+     *
+     * @return Map de inscrições da UC, com a chave a ser o código de aluno associado.
+     */
+    public Map<String, Inscricao> getMapInscricoes() {
+        return this.inscritoDAO.getMapByUC(this.codUC);
+    }
+
+    /**
+     * Método que devolve os alunos associados à UC.
+     *
+     * @return Lista de códigos de alunos inscritos na UC
+     */
+    public List<String> getAlunos() {
+        return this.inscritoDAO.getAlunos(this.codUC);
+    }
+
     public boolean alunoInscrito(String codAluno) {
-        return this.inscritoDAO.alunoInscritoNaUC(codAluno,codUC);
+        return this.inscritoDAO.alunoInscritoNaUC(codAluno,this.codUC);
     }
 
     public boolean existeTurno(String codTurno) {
-        String idTurno = codTurno.concat(codUC);
-        return this.turnoDAO.existeTurno(idTurno);
+        return this.turnoDAO.existeTurno(codTurno, this.codUC);
     }
     /**
      * Representação em String da UC.

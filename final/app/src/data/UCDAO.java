@@ -26,9 +26,9 @@ public class UCDAO {
                     "preferencia VARCHAR(20) NOT NULL)";
             stm.executeUpdate(sql);
 
-            // Tabela base 'turnos'
+            // Tabela 'turnos'
             sql = "CREATE TABLE IF NOT EXISTS turnos (" +
-                    "idTurno VARCHAR(10) NOT NULL PRIMARY KEY, " +
+                    "idTurno VARCHAR(10) NOT NULL, " +
                     "codUC VARCHAR(10) NOT NULL, " +
                     "diaSemana VARCHAR(10) NOT NULL, " +
                     "horaInicial TIME NOT NULL, " +
@@ -36,26 +36,33 @@ public class UCDAO {
                     "lotacao INT NOT NULL, " +
                     "sala VARCHAR(50) NOT NULL, " +
                     "tipo ENUM('TP', 'T', 'PL') NOT NULL, " +
+                    "PRIMARY KEY (idTurno, codUC), " +
                     "FOREIGN KEY (codUC) REFERENCES ucs(codUC), " +
                     "FOREIGN KEY (sala) REFERENCES salas(localizacao))";
             stm.executeUpdate(sql);
 
             // Tabela 'turnosTP'
             sql = "CREATE TABLE IF NOT EXISTS turnosTP (" +
-                    "idTurno VARCHAR(10) NOT NULL PRIMARY KEY, " +
-                    "FOREIGN KEY (idTurno) REFERENCES turnos(idTurno))";
+                    "idTurno VARCHAR(10) NOT NULL, " +
+                    "codUC VARCHAR(10) NOT NULL, " +
+                    "PRIMARY KEY (idTurno, codUC), " +
+                    "FOREIGN KEY (idTurno, codUC) REFERENCES turnos(idTurno, codUC))";
             stm.executeUpdate(sql);
 
             // Tabela 'turnosT'
             sql = "CREATE TABLE IF NOT EXISTS turnosT (" +
-                    "idTurno VARCHAR(10) NOT NULL PRIMARY KEY, " +
-                    "FOREIGN KEY (idTurno) REFERENCES turnos(idTurno))";
+                    "idTurno VARCHAR(10) NOT NULL, " +
+                    "codUC VARCHAR(10) NOT NULL, " +
+                    "PRIMARY KEY (idTurno, codUC), " +
+                    "FOREIGN KEY (idTurno, codUC) REFERENCES turnos(idTurno, codUC))";
             stm.executeUpdate(sql);
 
             // Tabela 'turnosPL'
             sql = "CREATE TABLE IF NOT EXISTS turnosPL (" +
-                    "idTurno VARCHAR(10) NOT NULL PRIMARY KEY, " +
-                    "FOREIGN KEY (idTurno) REFERENCES turnos(idTurno))";
+                    "idTurno VARCHAR(10) NOT NULL, " +
+                    "codUC VARCHAR(10) NOT NULL, " +
+                    "PRIMARY KEY (idTurno, codUC), " +
+                    "FOREIGN KEY (idTurno, codUC) REFERENCES turnos(idTurno, codUC))";
             stm.executeUpdate(sql);
 
         } catch (SQLException e) {
@@ -97,71 +104,71 @@ public class UCDAO {
 
                 // Inserir turnos para Cálculo
                 stm.executeUpdate("INSERT IGNORE INTO turnos (idTurno, codUC, diaSemana, horaInicial, horaFinal, lotacao, sala, tipo) VALUES " +
-                        "('T1UC101', 'UC101', 'SEGUNDA', '08:00:00', '10:00:00', 20, 'Ed1-0.02', 'T')," +
-                        "('T2UC101', 'UC101', 'QUARTA', '10:00:00', '12:00:00', 20, 'Ed1-0.02', 'T')," +
-                        "('TP1UC101', 'UC101', 'TERCA', '08:00:00', '09:30:00', 10, 'Ed1-1.01', 'TP')," +
-                        "('TP2UC101', 'UC101', 'QUINTA', '10:30:00', '12:00:00', 10, 'Ed1-1.03', 'TP')," +
-                        "('TP3UC101', 'UC101', 'SEXTA', '14:00:00', '16:00:00', 10, 'Ed1-1.02', 'TP')," +
-                        "('TP4UC101', 'UC101', 'SEXTA', '14:00:00', '16:00:00', 10, 'Ed1-1.03', 'TP')");
-                stm.executeUpdate("INSERT IGNORE INTO turnosT (idTurno) VALUES ('T1UC101'), ('T2UC101')");
-                stm.executeUpdate("INSERT IGNORE INTO turnosTP (idTurno) VALUES ('TP1UC101'), ('TP2UC101'), ('TP3UC101'), ('TP4UC101')");
+                        "('T1', 'UC101', 'SEGUNDA', '08:00:00', '10:00:00', 20, 'Ed1-0.02', 'T')," +
+                        "('T2', 'UC101', 'QUARTA', '10:00:00', '12:00:00', 20, 'Ed1-0.02', 'T')," +
+                        "('TP1', 'UC101', 'TERCA', '08:00:00', '09:30:00', 10, 'Ed1-1.01', 'TP')," +
+                        "('TP2', 'UC101', 'QUINTA', '10:30:00', '12:00:00', 10, 'Ed1-1.03', 'TP')," +
+                        "('TP3', 'UC101', 'SEXTA', '14:00:00', '16:00:00', 10, 'Ed1-1.02', 'TP')," +
+                        "('TP4', 'UC101', 'SEXTA', '14:00:00', '16:00:00', 10, 'Ed1-1.03', 'TP')");
+                stm.executeUpdate("INSERT IGNORE INTO turnosT (idTurno, codUC) VALUES ('T1', 'UC101'), ('T2', 'UC101')");
+                stm.executeUpdate("INSERT IGNORE INTO turnosTP (idTurno, codUC) VALUES ('TP1', 'UC101'), ('TP2', 'UC101'), ('TP3', 'UC101'), ('TP4', 'UC101')");
 
                 // Inserir turnos para Programação Funcional
                 stm.executeUpdate("INSERT IGNORE INTO turnos (idTurno, codUC, diaSemana, horaInicial, horaFinal, lotacao, sala, tipo) VALUES " +
-                        "('T1UC102', 'UC102', 'SEGUNDA', '10:00:00', '12:00:00', 20, 'Ed1-0.02', 'T')," +
-                        "('T2UC102', 'UC102', 'TERCA', '14:00:00', '16:00:00', 20, 'Ed1-0.02', 'T')," +
-                        "('TP1UC102', 'UC102', 'QUARTA', '08:00:00', '09:30:00', 10, 'Ed1-1.01', 'TP')," +
-                        "('TP2UC102', 'UC102', 'QUINTA', '09:30:00', '11:00:00', 10, 'Ed2-1.03', 'TP')," +
-                        "('TP3UC102', 'UC102', 'SEXTA', '11:00:00', '12:30:00', 10, 'Ed1-1.02', 'TP')," +
-                        "('TP4UC102', 'UC102', 'SEXTA', '14:00:00', '15:30:00', 10, 'Ed1-1.01', 'TP')");
-                stm.executeUpdate("INSERT IGNORE INTO turnosT (idTurno) VALUES ('T1UC102'), ('T2UC102')");
-                stm.executeUpdate("INSERT IGNORE INTO turnosTP (idTurno) VALUES ('TP1UC102'), ('TP2UC102'), ('TP3UC102'), ('TP4UC102')");
+                        "('T1', 'UC102', 'SEGUNDA', '10:00:00', '12:00:00', 20, 'Ed1-0.02', 'T')," +
+                        "('T2', 'UC102', 'TERCA', '14:00:00', '16:00:00', 20, 'Ed1-0.02', 'T')," +
+                        "('TP1', 'UC102', 'QUARTA', '08:00:00', '09:30:00', 10, 'Ed1-1.01', 'TP')," +
+                        "('TP2', 'UC102', 'QUINTA', '09:30:00', '11:00:00', 10, 'Ed2-1.03', 'TP')," +
+                        "('TP3', 'UC102', 'SEXTA', '11:00:00', '12:30:00', 10, 'Ed1-1.02', 'TP')," +
+                        "('TP4', 'UC102', 'SEXTA', '14:00:00', '15:30:00', 10, 'Ed1-1.01', 'TP')");
+                stm.executeUpdate("INSERT IGNORE INTO turnosT (idTurno, codUC) VALUES ('T1', 'UC102'), ('T2', 'UC102')");
+                stm.executeUpdate("INSERT IGNORE INTO turnosTP (idTurno, codUC) VALUES ('TP1', 'UC102'), ('TP2', 'UC102'), ('TP3', 'UC102'), ('TP4', 'UC102')");
 
                 // Inserir turnos para Álgebra Linear
                 stm.executeUpdate("INSERT IGNORE INTO turnos (idTurno, codUC, diaSemana, horaInicial, horaFinal, lotacao, sala, tipo) VALUES " +
-                        "('T1UC103', 'UC103', 'SEGUNDA', '10:00:00', '12:00:00', 20, 'Ed3-0.06', 'T')," +
-                        "('T2UC103', 'UC103', 'QUINTA', '11:00:00', '13:00:00', 20, 'Ed1-0.08', 'T')," +
-                        "('TP1UC103', 'UC103', 'QUARTA', '11:00:00', '13:00:00', 10, 'Ed3-2.01', 'TP')," +
-                        "('TP2UC103', 'UC103', 'QUARTA', '14:00:00', '16:00:00', 10, 'Ed2-2.06', 'TP')," +
-                        "('TP3UC103', 'UC103', 'QUINTA', '09:00:00', '11:00:00', 10, 'Ed2-1.15', 'TP')");
-                stm.executeUpdate("INSERT IGNORE INTO turnosT (idTurno) VALUES ('T1UC103'), ('T2UC103')");
-                stm.executeUpdate("INSERT IGNORE INTO turnosTP (idTurno) VALUES ('TP1UC103'), ('TP2UC103'), ('TP3UC103')");
+                        "('T1', 'UC103', 'SEGUNDA', '10:00:00', '12:00:00', 20, 'Ed3-0.06', 'T')," +
+                        "('T2', 'UC103', 'QUINTA', '11:00:00', '13:00:00', 20, 'Ed1-0.08', 'T')," +
+                        "('TP1', 'UC103', 'QUARTA', '11:00:00', '13:00:00', 10, 'Ed3-2.01', 'TP')," +
+                        "('TP2', 'UC103', 'QUARTA', '14:00:00', '16:00:00', 10, 'Ed2-2.06', 'TP')," +
+                        "('TP3', 'UC103', 'QUINTA', '09:00:00', '11:00:00', 10, 'Ed2-1.15', 'TP')");
+                stm.executeUpdate("INSERT IGNORE INTO turnosT (idTurno, codUC) VALUES ('T1', 'UC103'), ('T2', 'UC103')");
+                stm.executeUpdate("INSERT IGNORE INTO turnosTP (idTurno, codUC) VALUES ('TP1', 'UC103'), ('TP2', 'UC103'), ('TP3', 'UC103')");
 
                 // Inserir turnos para Estatística Aplicada
                 stm.executeUpdate("INSERT IGNORE INTO turnos (idTurno, codUC, diaSemana, horaInicial, horaFinal, lotacao, sala, tipo) VALUES " +
-                        "('T2UC201', 'UC201', 'SEGUNDA', '14:00:00', '16:00:00', 20, 'Ed3-0.06', 'T')," +
-                        "('T1UC201', 'UC201', 'QUARTA', '16:00:00', '18:00:00', 20, 'Ed3-0.06', 'T')");
-                stm.executeUpdate("INSERT IGNORE INTO turnosT (idTurno) VALUES ('T2UC201'), ('T1UC201')");
+                        "('T1', 'UC201', 'SEGUNDA', '14:00:00', '16:00:00', 20, 'Ed3-0.06', 'T')," +
+                        "('T2', 'UC201', 'QUARTA', '16:00:00', '18:00:00', 20, 'Ed3-0.06', 'T')");
+                stm.executeUpdate("INSERT IGNORE INTO turnosT (idTurno, codUC) VALUES ('T1', 'UC201'), ('T2', 'UC201')");
 
                 stm.executeUpdate("INSERT IGNORE INTO turnos (idTurno, codUC, diaSemana, horaInicial, horaFinal, lotacao, sala, tipo) VALUES " +
-                        "('TP1UC201', 'UC201', 'SEGUNDA', '11:00:00', '13:00:00', 10, 'Ed3-1.05', 'TP')," +
-                        "('TP2UC201', 'UC201', 'QUARTA', '09:00:00', '11:00:00', 10, 'Ed1-2.14', 'TP')," +
-                        "('TP3UC201', 'UC201', 'QUARTA', '11:00:00', '13:00:00', 10, 'Ed1-2.17', 'TP')");
-                stm.executeUpdate("INSERT IGNORE INTO turnosTP (idTurno) VALUES ('TP1UC201'), ('TP2UC201'), ('TP3UC201')");
+                        "('TP1', 'UC201', 'SEGUNDA', '11:00:00', '13:00:00', 10, 'Ed3-1.05', 'TP')," +
+                        "('TP2', 'UC201', 'QUARTA', '09:00:00', '11:00:00', 10, 'Ed1-2.14', 'TP')," +
+                        "('TP3', 'UC201', 'QUARTA', '11:00:00', '13:00:00', 10, 'Ed1-2.17', 'TP')");
+                stm.executeUpdate("INSERT IGNORE INTO turnosTP (idTurno, codUC) VALUES ('TP1', 'UC201'), ('TP2', 'UC201'), ('TP3', 'UC201')");
 
                 // Inserir turnos para Arquitetura de Computadores
                 stm.executeUpdate("INSERT IGNORE INTO turnos (idTurno, codUC, diaSemana, horaInicial, horaFinal, lotacao, sala, tipo) VALUES " +
-                        "('T1UC202', 'UC202', 'TERCA', '13:00:00', '15:00:00', 20, 'Ed3-0.06', 'T')," +
-                        "('T2UC202', 'UC202', 'SEXTA', '14:00:00', '16:00:00', 20, 'Ed2-0.05', 'T')");
-                stm.executeUpdate("INSERT IGNORE INTO turnosT (idTurno) VALUES ('T1UC202'), ('T2UC202')");
+                        "('T1', 'UC202', 'TERCA', '13:00:00', '15:00:00', 20, 'Ed3-0.06', 'T')," +
+                        "('T2', 'UC202', 'SEXTA', '14:00:00', '16:00:00', 20, 'Ed2-0.05', 'T')");
+                stm.executeUpdate("INSERT IGNORE INTO turnosT (idTurno, codUC) VALUES ('T1', 'UC202'), ('T2', 'UC202')");
 
                 stm.executeUpdate("INSERT IGNORE INTO turnos (idTurno, codUC, diaSemana, horaInicial, horaFinal, lotacao, sala, tipo) VALUES " +
-                        "('TP1UC202', 'UC202', 'QUARTA', '14:00:00', '16:00:00', 10, 'Ed7-1.10', 'TP')," +
-                        "('TP2UC202', 'UC202', 'QUINTA', '13:30:00', '15:30:00', 10, 'Ed7-1.10', 'TP')," +
-                        "('TP3UC202', 'UC202', 'QUINTA', '13:30:00', '15:30:00', 10, 'Ed7-0.08', 'TP')");
-                stm.executeUpdate("INSERT IGNORE INTO turnosTP (idTurno) VALUES ('TP1UC202'), ('TP2UC202'), ('TP3UC202')");
+                        "('TP1', 'UC202', 'QUARTA', '14:00:00', '16:00:00', 10, 'Ed7-1.10', 'TP')," +
+                        "('TP2', 'UC202', 'QUINTA', '13:30:00', '15:30:00', 10, 'Ed7-1.10', 'TP')," +
+                        "('TP3', 'UC202', 'QUINTA', '13:30:00', '15:30:00', 10, 'Ed7-0.08', 'TP')");
+                stm.executeUpdate("INSERT IGNORE INTO turnosTP (idTurno, codUC) VALUES ('TP1', 'UC202'), ('TP2', 'UC202'), ('TP3', 'UC202')");
 
                 // Inserir turnos para Física Moderna
                 stm.executeUpdate("INSERT IGNORE INTO turnos (idTurno, codUC, diaSemana, horaInicial, horaFinal, lotacao, sala, tipo) VALUES " +
-                        "('T1UC203', 'UC203', 'TERCA', '15:00:00', '17:00:00', 20, 'Ed3-0.06', 'T')," +
-                        "('T2UC203', 'UC203', 'QUINTA', '18:00:00', '20:00:00', 20, 'Ed1-0.08', 'T')");
-                stm.executeUpdate("INSERT IGNORE INTO turnosT (idTurno) VALUES ('T1UC203'), ('T2UC203')");
+                        "('T1', 'UC203', 'TERCA', '15:00:00', '17:00:00', 20, 'Ed3-0.06', 'T')," +
+                        "('T2', 'UC203', 'QUINTA', '18:00:00', '20:00:00', 20, 'Ed1-0.08', 'T')");
+                stm.executeUpdate("INSERT IGNORE INTO turnosT (idTurno, codUC) VALUES ('T1', 'UC203'), ('T2', 'UC203')");
 
                 stm.executeUpdate("INSERT IGNORE INTO turnos (idTurno, codUC, diaSemana, horaInicial, horaFinal, lotacao, sala, tipo) VALUES " +
-                        "('TP1UC203', 'UC203', 'SEGUNDA', '11:00:00', '13:00:00', 10, 'Ed2-2.09', 'TP')," +
-                        "('TP2UC203', 'UC203', 'QUARTA', '11:00:00', '13:00:00', 10, 'Ed2-2.09', 'TP')," +
-                        "('TP3UC203', 'UC203', 'QUINTA', '09:00:00', '11:00:00', 10, 'Ed2-0.20', 'TP')");
-                stm.executeUpdate("INSERT IGNORE INTO turnosTP (idTurno) VALUES ('TP1UC203'), ('TP2UC203'), ('TP3UC203')");
+                        "('TP1', 'UC203', 'SEGUNDA', '11:00:00', '13:00:00', 10, 'Ed2-2.09', 'TP')," +
+                        "('TP2', 'UC203', 'QUARTA', '11:00:00', '13:00:00', 10, 'Ed2-2.09', 'TP')," +
+                        "('TP3', 'UC203', 'QUINTA', '09:00:00', '11:00:00', 10, 'Ed2-0.20', 'TP')");
+                stm.executeUpdate("INSERT IGNORE INTO turnosTP (idTurno, codUC) VALUES ('TP1', 'UC203'), ('TP2', 'UC203'), ('TP3', 'UC203')");
 
                 conn.commit();
             } catch (SQLException e) {

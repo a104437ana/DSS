@@ -36,22 +36,45 @@ public class GestHorariosFacade implements IGestHorariosLN{
         return this.horarios.existeTurno(codTurno,codUC);
     }
 
-    public boolean turnoTemEspaço(String codTurno, String codUC) {
-        return this.horarios.turnoTemEspaço(codTurno,codUC);
+    public boolean turnoTemEspaco(String codTurno, String codUC) {
+        return this.horarios.turnoTemEspaco(codTurno,codUC);
     }
 
     public boolean alunoTemConflito(String codAluno, String codTurno, String codUC) {
         return this.horarios.alunoTemConflito(codAluno,codTurno,codUC);
     }
 
-    public boolean alunoTemTurno(String codAluno, String codTurno, String codUC) {
-        return this.horarios.alunoTemTurno(codAluno,codTurno,codUC);
+    /**
+     * Verifica se um aluno está associado a um turno específico de uma uc.
+     *
+     * @param codAluno Código do aluno.
+     * @param codTurno  Código do turno.
+     * @param codUC   Código da UC.
+     * @return True se o aluno está associado ao turno, se não False.
+     */
+    public boolean alunoTemTurno(String codAluno, String codUC, String codTurno) {
+        return this.horarios.alunoTemTurno(codAluno,codUC,codTurno);
     }
 
+    /**
+     * Adiciona um aluno a um turno específico de uma UC.
+     *
+     * @param codAluno Código do aluno.
+     * @param codTurno  Código do turno.
+     * @param codUC    Código da UC.
+     */
     public void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno) {
         this.horarios.alocarAlunoAoTurno(codAluno,codUC,codTurno);
+        System.out.println("Aluno '" + codAluno + "' alocado com sucesso no turno '" + codTurno + "' da UC '" + codUC + "'.");
     }
 
+    /**
+     * Remove um aluno de um turno específico de uma UC.
+     *
+     * @param codAluno Código do aluno.
+     * @param codTurno  Código do turno.
+     * @param codUC     Código da UC.
+     */
     public void removerAlunoDoTurno(String codAluno, String codUC, String codTurno) {
         this.horarios.removerAlunoDoTurno(codAluno,codUC,codTurno);
     }
@@ -59,6 +82,7 @@ public class GestHorariosFacade implements IGestHorariosLN{
     public void gerarHorarios(int semestre) {
         this.horarios.gerarHorarios(semestre);
     }
+
     /**
      * Importa utilizadores, alunos e suas inscrições de dois arquivos CSV.
      *
@@ -77,7 +101,7 @@ public class GestHorariosFacade implements IGestHorariosLN{
             }
 
             // Remover inscrições e alunos antigos
-            //this.horarios.removerTodasInscricoes();
+            this.horarios.removerTodasInscricoes();
             this.horarios.removerAlunos();
 
             // Importar alunos

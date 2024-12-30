@@ -6,11 +6,37 @@ public interface IGestHorariosLN {
     boolean existeUC(String codUC);
     boolean alunoInscritoNaUC(String codAluno, String codUC);
     boolean existeTurno(String codTurno, String codUC);
-    boolean turnoTemEspaço(String codTurno, String codUC);
+    boolean turnoTemEspaco(String codTurno, String codUC);
     boolean alunoTemConflito(String codAluno, String codTurno, String codUC);
-    boolean alunoTemTurno(String codAluno, String codTurno, String codUC);
+
+    /**
+     * Verifica se um aluno está associado a um turno específico de uma uc.
+     *
+     * @param codAluno Código do aluno.
+     * @param codTurno  Código do turno.
+     * @param codUC   Código da UC.
+     * @return True se o aluno está associado ao turno, se não False.
+     */
+    boolean alunoTemTurno(String codAluno, String codUC, String codTurno);
+
+    /**
+     * Adiciona um aluno a um turno específico de uma UC.
+     *
+     * @param codAluno Código do aluno.
+     * @param codTurno  Código do turno.
+     * @param codUC    Código da UC.
+     */
     void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno);
+
+    /**
+     * Remove um aluno de um turno específico de uma UC.
+     *
+     * @param codAluno Código do aluno.
+     * @param codTurno  Código do turno.
+     * @param codUC     Código da UC.
+     */
     void removerAlunoDoTurno(String codAluno, String codUC, String codTurno);
+
     void gerarHorarios(int semestre);
     /**
      * Importa utilizadores, alunos e suas inscrições de dois arquivos CSV.
