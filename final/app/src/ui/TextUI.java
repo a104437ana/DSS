@@ -113,7 +113,12 @@ public class TextUI {
      * Mostrar horário de aluno
      */
     private void printHorario(String user) {
-        System.out.println(this.model.consultarHorario(user));
+        String horario = this.model.consultarHorario(user);
+        if (horario == null) { // Verificar se tem turnos
+            System.out.println("O aluno ainda não tem horário!");
+            return;
+        }
+        System.out.println(horario);
     }
 
 
