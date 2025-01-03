@@ -8,6 +8,7 @@ import business.SSUtilizadores.SSUtilizadores;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.io.File;
 import java.io.IOException;
 
@@ -65,7 +66,6 @@ public class GestHorariosFacade implements IGestHorariosLN{
      */
     public void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno) {
         this.horarios.alocarAlunoAoTurno(codAluno,codUC,codTurno);
-        System.out.println("Aluno '" + codAluno + "' alocado com sucesso no turno '" + codTurno + "' da UC '" + codUC + "'.");
     }
 
     /**
@@ -79,8 +79,14 @@ public class GestHorariosFacade implements IGestHorariosLN{
         this.horarios.removerAlunoDoTurno(codAluno,codUC,codTurno);
     }
 
-    public void gerarHorarios(int semestre) {
-        this.horarios.gerarHorarios(semestre);
+    /**
+     * Aloca todos os alunos a turnos a que estão inscritos no semestre dado.
+     * 
+     * @param semestre  Semestre para o qual fazer a alocação
+     * @return Map de codAluno para map de codUC para set do tipo de turno a que não está alocado
+     */
+    public Map<String, Map<String, Set<Class<?>>>> gerarHorarios(int semestre) {
+        return this.horarios.gerarHorarios(semestre);
     }
 
     /**

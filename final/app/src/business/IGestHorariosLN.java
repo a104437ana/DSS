@@ -1,5 +1,8 @@
 package business;
 
+import java.util.Map;
+import java.util.Set;
+
 public interface IGestHorariosLN {
 
     boolean existeAluno(String codAluno);
@@ -12,9 +15,9 @@ public interface IGestHorariosLN {
     /**
      * Verifica se um aluno está associado a um turno específico de uma uc.
      *
-     * @param codAluno Código do aluno.
+     * @param codAluno  Código do aluno.
      * @param codTurno  Código do turno.
-     * @param codUC   Código da UC.
+     * @param codUC     Código da UC.
      * @return True se o aluno está associado ao turno, se não False.
      */
     boolean alunoTemTurno(String codAluno, String codUC, String codTurno);
@@ -22,22 +25,29 @@ public interface IGestHorariosLN {
     /**
      * Adiciona um aluno a um turno específico de uma UC.
      *
-     * @param codAluno Código do aluno.
+     * @param codAluno  Código do aluno.
      * @param codTurno  Código do turno.
-     * @param codUC    Código da UC.
+     * @param codUC     Código da UC.
      */
     void alocarAlunoAoTurno(String codAluno, String codUC, String codTurno);
 
     /**
      * Remove um aluno de um turno específico de uma UC.
      *
-     * @param codAluno Código do aluno.
+     * @param codAluno  Código do aluno.
      * @param codTurno  Código do turno.
      * @param codUC     Código da UC.
      */
     void removerAlunoDoTurno(String codAluno, String codUC, String codTurno);
 
-    void gerarHorarios(int semestre);
+    /**
+     * Aloca todos os alunos a turnos a que estão inscritos no semestre dado.
+     * 
+     * @param semestre  Semestre para o qual fazer a alocação
+     * @return Map de codAluno para map de codUC para set do tipo de turno a que não está alocado
+     */
+    Map<String, Map<String, Set<Class<?>>>> gerarHorarios(int semestre);
+
     /**
      * Importa utilizadores, alunos e suas inscrições de dois arquivos CSV.
      *

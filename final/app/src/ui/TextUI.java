@@ -5,6 +5,8 @@ import business.IGestHorariosLN;
 
 
 import java.util.Scanner;
+import java.util.Set;
+import java.util.Map;
 
 
 /**
@@ -205,7 +207,7 @@ public class TextUI {
             System.out.println("Semestre inválido!");
             return;
         }
-        this.model.gerarHorarios(semestre);
+        Map<String, Map<String, Set<Class<?>>>> alunosNaoAlocados = this.model.gerarHorarios(semestre);
     }
 
     /**
@@ -269,6 +271,7 @@ public class TextUI {
             }
         }
         this.model.alocarAlunoAoTurno(codAluno,codUC,codTurno);
+        System.out.println("Aluno '" + codAluno + "' alocado com sucesso no turno '" + codTurno + "' da UC '" + codUC + "'.");
     }
 
     /**
