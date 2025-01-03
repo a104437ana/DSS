@@ -251,7 +251,8 @@ public class SSHorarios implements ISSHorarios {
      */
     public String getHorarioAluno(String codAluno) {
         Aluno a = this.alunosDAO.get(codAluno);
-        return a.getStringHorario();
+        Map<DiaSemana, List<Turno>> horario = a.getHorario();
+        return a.getStringHorario(horario);
     }
 
     /**

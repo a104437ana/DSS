@@ -164,9 +164,8 @@ public class Aluno {
      *
      * @return String com o horario do aluno.
      */
-    public String getStringHorario() {
+    public String getStringHorario( Map<DiaSemana, List<Turno>> horario) {
         StringBuilder res = new StringBuilder();
-        Map<DiaSemana, List<Turno>> horario = new HashMap<>(this.getHorario());
         if (horario.isEmpty()) return null; // verifica se é vazio
 
         res.append("Horário do aluno ").append(this.codAluno).append("\n");
