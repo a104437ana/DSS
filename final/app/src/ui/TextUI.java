@@ -72,8 +72,8 @@ public class TextUI {
     private void menuPrincipalAdmin(String user) {
         Menu menu = new Menu(new String[]{
                 "Importação",
-                "Atribuição manual dos alunos aos turnos",
                 "Atribuição automática dos alunos aos turnos",
+                "Atribuição manual dos alunos aos turnos",
                 "Operações de Listagem"
 //                "Definição das Preferências e Limites",
 //                "Criação e Gestão de Horários de Alunos",
@@ -82,8 +82,8 @@ public class TextUI {
         });
 
         menu.setHandler(1, this::menuImport);
-        menu.setHandler(2, this::menuManual);
-        menu.setHandler(3, this::menuAuto);
+        menu.setHandler(2, this::menuAuto);
+        menu.setHandler(3, this::menuManual);
         menu.setHandler(4, this::menuListagem);
 //        menu.setHandler(3, this::menuDefinirPrefLim);
 //        menu.setHandler(4, this::menuGestaoHorario);
