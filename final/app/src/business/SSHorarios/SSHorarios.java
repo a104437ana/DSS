@@ -142,6 +142,17 @@ public class SSHorarios implements ISSHorarios {
         Map<String, Aluno> alunos = alunosDAO.getAllAsMap();
         Map<String, Map<String, Set<String>>> alunosNaoAlocados = new HashMap<>(); //codAluno -> codUC -> TiposTurnos
 
+        for (Aluno aluno : alunos.values()) { //retira todos os turnos dos alunos
+            Map<String, List<Turno>> turnosUCs = aluno.getTurnos();
+            for (Map.Entry<String, List<Turno>> turnos : turnosUCs.entrySet()) {
+                String codUC = turnos.getKey();
+                for (Turno turno : turnos.getValue()) {
+                    String codTurno = turno.getIdTurno();
+                    aluno.removeTurno(codUC, codTurno);
+                }
+            }
+        }
+
         for (UC uc : ucs) { //faz a alocação uc a uc
             List<Turno> turnosUC = uc.getTurnos();
             List<Inscricao> inscricoes = uc.getInscricoes();
