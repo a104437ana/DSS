@@ -1,3 +1,4 @@
 #ficheiros de backup do visual paradigm
 *.vpp.bak_*
 *.lck
+/.idea/*
