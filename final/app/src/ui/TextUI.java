@@ -321,11 +321,12 @@ public class TextUI {
             System.out.println("Turno não existe!");
             return;
         }
-        if (!this.model.alunoTemTurno(codAluno,codTurno,codUC)) {
+        if (!this.model.alunoTemTurno(codAluno,codUC,codTurno)) {
             System.out.println("O aluno não está neste turno");
             return;
         }
         this.model.removerAlunoDoTurno(codAluno,codUC,codTurno);
+        System.out.println("Aluno '" + codAluno + "' removido com sucesso do turno '" + codTurno + "' da UC '" + codUC + "'.");
     }
 
     /**
