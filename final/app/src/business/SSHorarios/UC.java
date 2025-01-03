@@ -6,6 +6,7 @@ import data.TurnoDAO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Classe que representa uma unidade curricular (UC).
@@ -15,7 +16,7 @@ public class UC {
     private String nome;                // Nome da unidade curricular
     private int semestre;               // Semestre em que a unidade curricular é lecionada
     private boolean opcional;           // Indica se a unidade curricular é opcional
-    private Preferência preferencia;           // Preferência associada à unidade curricular
+    private Preferência preferencia;    // Preferência associada à unidade curricular
     private TurnoDAO turnoDAO;          // DAO dos turnos
     private InscritoDAO inscritoDAO;    // DAO dos inscritos
 

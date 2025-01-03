@@ -1,11 +1,8 @@
 package business.SSHorarios;
 
-import data.AlunoDAO;
 import data.SalaDAO;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Classe que representa um turno de uma unidade curricular.

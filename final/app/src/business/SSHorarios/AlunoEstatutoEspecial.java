@@ -18,5 +18,15 @@ public class AlunoEstatutoEspecial extends Aluno {
     public String getEstatuto() {
         return "Estatuto";
     }
+
+    /**
+     * Retorna se o aluno tem estatuto.
+     *
+     * @return Se o aluno tem estatuto (padrão: False)
+     */
+    @Override
+    public boolean temEstatuto() {
+        return true;
+    }
 }
 

@@ -1,6 +1,8 @@
 package business.SSHorarios;
 
 
+import java.util.Comparator;
+
 import data.AlunoDAO;
 
 /**
@@ -42,6 +44,16 @@ public class Inscricao {
     // Método de DAO
     public Aluno getAluno(){
         return this.aluno.get(this.codAluno);
+    }
+
+    public static Comparator<Inscricao> compararPorNInscricao() {
+        return new Comparator<Inscricao>() {
+            public int compare(Inscricao inscricao1, Inscricao inscricao2) {
+                int comparaNInscricao = Double.compare(inscricao1.getNInscricao(), inscricao2.getNInscricao());
+                if (comparaNInscricao != 0) return comparaNInscricao;
+                return inscricao1.getCodAluno().compareTo(inscricao2.getCodAluno());
+            }
+        };
     }
 
     @Override

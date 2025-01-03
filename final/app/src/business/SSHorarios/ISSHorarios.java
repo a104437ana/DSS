@@ -1,6 +1,7 @@
 package business.SSHorarios;
 
 import java.util.Map;
+import java.util.Set;
 
 public interface ISSHorarios {
 
@@ -39,7 +40,7 @@ public interface ISSHorarios {
      */
     void removerAlunoDoTurno(String codAluno, String codUC, String codTurno);
 
-    void gerarHorarios(int semestre);
+    Map<String, Map<String, Set<Class<?>>>> gerarHorarios(int semestre);
 
     /**
      * Importa alunos e suas inscrições a partir de um arquivo CSV combinado.

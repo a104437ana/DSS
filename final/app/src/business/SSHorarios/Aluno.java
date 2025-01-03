@@ -2,7 +2,6 @@ package business.SSHorarios;
 
 import data.TurnoDAO;
 
-import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -89,6 +88,46 @@ public class Aluno {
      */
     public String getEstatuto() {
         return "Nenhum";
+    }
+
+    /**
+     * Retorna se o aluno tem estatuto.
+     *
+     * @return Se o aluno tem estatuto (padrão: False)
+     */
+    public boolean temEstatuto() {
+        return false;
+    }
+
+    public static Comparator<Aluno> compararPorEstatuto() {
+        return new Comparator<Aluno>() {
+            @Override
+            public int compare(Aluno a1, Aluno a2) {
+                int comparaEstatuto = Boolean.compare(a1.temEstatuto(), a2.temEstatuto());
+                if (comparaEstatuto != 0) return comparaEstatuto;
+                return a1.getCodAluno().compareTo(a2.getCodAluno());
+            }
+        };
+    }
+
+    public static Comparator<Aluno> compararPorMedia() {
+        return new Comparator<Aluno>() {
+            @Override
+            public int compare(Aluno a1, Aluno a2) {
+                int comparaMedia = Double.compare(a1.getMedia(), a2.getMedia());
+                if (comparaMedia != 0) return comparaMedia;
+                return a1.getCodAluno().compareTo(a2.getCodAluno());
+            }
+        };
+    }
+
+    public static Comparator<Aluno> compararPorCodAluno() {
+        return new Comparator<Aluno>() {
+            @Override
+            public int compare(Aluno a1, Aluno a2) {
+                return a1.getCodAluno().compareTo(a2.getCodAluno());
+            }
+        };
     }
 
     /*-------------- OUTROS MÉTODOS DAOS ------------*/

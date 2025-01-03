@@ -304,6 +304,33 @@ public class UCDAO {
     }
 
     /**
+     * Obtém todas as UCs do banco de dados de um determinado semestre.
+     *
+     * @return Coleção contendo todas as UCs de um dado semestre.
+     */
+    public Collection<UC> getAllSemestre(int getSemestre) {
+        Collection<UC> ucs = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery(String.format("SELECT * FROM ucs WHERE semestre = %d", getSemestre))) {
+            while (rs.next()) {
+                String cod = rs.getString("codUC");
+                String nome = rs.getString("nome");
+                int semestre = rs.getInt("semestre");
+                boolean opcional = rs.getBoolean("opcional");
+                Preferência preferencia = Preferência.valueOf(rs.getString("preferencia"));
+
+                UC uc = new UC(cod, nome, semestre, opcional, preferencia);
+                ucs.add(uc);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar todas as UCs: " + e.getMessage());
+        }
+        return ucs;
+    }
+
+    /**
      * Obtém todas as UCs do banco de dados como um mapa.
      *
      * @return Mapa contendo todas as UCs, onde a chave é o código da UC.

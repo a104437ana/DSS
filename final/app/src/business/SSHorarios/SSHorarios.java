@@ -130,8 +130,91 @@ public class SSHorarios implements ISSHorarios {
         aluno.removeTurno(codUC, codTurno);
     }
 
-    public void gerarHorarios(int semestre) {
-        return;
+    /**
+     * Método que gera e aloca alunos a turnos automáticamente respeitando as restrições
+     */
+    public Map<String, Map<String, Set<Class<?>>>> gerarHorarios(int semestre) {
+        Collection<UC> ucs = ucsDAO.getAllSemestre(semestre);
+
+        Map<String, Aluno> alunos = alunosDAO.getAllAsMap();
+        Map<String, Map<String, Set<Class<?>>>> alunosNaoAlocados = new HashMap<>(); //codAluno -> codUC -> TiposTurnos
+
+        for (UC uc : ucs) { //faz a alocação uc a uc
+            List<Turno> turnosUC = uc.getTurnos();
+            List<Inscricao> inscricoes = uc.getInscricoes();
+            Preferência preferencia = uc.getPreferencia();
+            String codUC = uc.getCodUC();
+
+            List<List<Turno>> tiposTurnos = new ArrayList<>();
+            List<Turno> turnosT = new ArrayList<>();
+            List<Turno> turnosTP = new ArrayList<>();
+            List<Turno> turnosPL = new ArrayList<>();
+            tiposTurnos.add(turnosT); //turnos teóricos
+            tiposTurnos.add(turnosTP); //turnos teórico práticos
+            tiposTurnos.add(turnosPL); //turnos práticos
+
+            for (Turno turno : turnosUC) { //separa os turnos nos seus tipos
+                if (turno instanceof TurnoT) turnosT.add(turno);
+                else if (turno instanceof TurnoTP) turnosTP.add(turno);
+                else if (turno instanceof TurnoPL) turnosPL.add(turno);
+            }
+
+            List<Aluno> alunosInscritos = new ArrayList<>();
+
+            if (preferencia == Preferência.INSCRICAO) { //se a preferência for por número de inscrição
+                inscricoes.sort(Inscricao.compararPorNInscricao()); //ordena as inscrições por número de inscrição
+            }
+
+            for (Inscricao inscricao : inscricoes) { //adiciona os alunos nas inscrições aos alunos inscritos
+                String codAluno = inscricao.getCodAluno();
+                Aluno aluno = alunos.get(codAluno);
+                alunosInscritos.add(aluno);
+            }
+
+            if (preferencia == Preferência.MEDIA) { //se a preferência for por média dos alunos
+                alunosInscritos.sort(Aluno.compararPorMedia()); //ordena os alunos por média
+            }
+            else if (preferencia == Preferência.ESTATUTO) { //se a preferência for por estatutos
+                alunosInscritos.sort(Aluno.compararPorEstatuto()); //ordena os alunos por estatuto
+            }
+            else if (preferencia == Preferência.NENHUM) { //se não tiver preferência
+                alunosInscritos.sort(Aluno.compararPorCodAluno()); //ordena os alunos por codAluno
+            }
+
+            int escolhaTurno = 0;
+            for (Aluno aluno : alunosInscritos) {
+                int tentativas = 0;
+                boolean alocado = false;
+                String codAluno = aluno.getCodAluno();
+
+                for (List<Turno> turnos : tiposTurnos) { //tenta alocar aluno para cada tipo de turno T -> TP -> PL
+
+                    for (tentativas = 0, alocado = false; !alocado && tentativas < turnos.size(); tentativas++) {
+                        int escolha = escolhaTurno % turnos.size();
+                        Turno turno = turnos.get(escolha);
+                        String codTurno = turno.getIdTurno();
+    
+                        if (turnoTemEspaco(codTurno, codUC)) { //se houver espaço no turno
+    
+                            if (!alunoTemConflito(codAluno, codTurno, codUC)) { //se não tem conflito horário
+                                aluno.putTurno(codUC, codTurno);;
+                                alocado = true;
+                            }
+                        }
+    
+                        escolhaTurno++;
+                    }
+                    if (!alocado && turnos.size() > 0) { //se não conseguiu alocar
+                        alunosNaoAlocados.computeIfAbsent(codAluno, k -> new HashMap<>());
+                        alunosNaoAlocados.get(codAluno).computeIfAbsent(codUC, k -> new TreeSet<>());
+                        Set<Class<?>> turnosNaoAlocado = alunosNaoAlocados.get(codAluno).get(codUC);
+                        turnosNaoAlocado.add(turnos.get(0).getClass());
+                    }
+                }
+            }
+        }
+
+        return alunosNaoAlocados;
     }
 
     /**
