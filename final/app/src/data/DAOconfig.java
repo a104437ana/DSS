@@ -11,7 +11,7 @@ import java.sql.Statement;
 
 public class DAOconfig {
     static final String USERNAME = "root";
-    static final String PASSWORD = "root";
+    static final String PASSWORD = "edgarsql";
     private static final String DATABASE = "dss";
     //private static final String DRIVER = "jdbc:mariadb";              // Usar para MariaDB
     private static final String DRIVER = "jdbc:mysql";                  // Usar para MySQL

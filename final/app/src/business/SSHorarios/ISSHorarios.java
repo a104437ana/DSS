@@ -40,6 +40,12 @@ public interface ISSHorarios {
      */
     void removerAlunoDoTurno(String codAluno, String codUC, String codTurno);
 
+    /**
+     * Aloca todos os alunos a turnos a que estão inscritos no semestre dado.
+     * 
+     * @param semestre  Semestre para o qual fazer a alocação
+     * @return Map de codAluno para map de codUC para set do tipo de turno a que não está alocado
+     */
     Map<String, Map<String, Set<String>>> gerarHorarios(int semestre);
 
     /**

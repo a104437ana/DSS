@@ -131,7 +131,10 @@ public class SSHorarios implements ISSHorarios {
     }
 
     /**
-     * Método que gera e aloca alunos a turnos automáticamente respeitando as restrições
+     * Método que gera e aloca alunos a turnos automáticamente respeitando as restrições.
+     * 
+     * @param semestre  Semestre para o qual fazer a alocação
+     * @return Map de codAluno para map de codUC para set do tipo de turno a que não está alocado
      */
     public Map<String, Map<String, Set<String>>> gerarHorarios(int semestre) {
         Collection<UC> ucs = ucsDAO.getAllSemestre(semestre);
