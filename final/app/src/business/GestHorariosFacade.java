@@ -7,6 +7,7 @@ import business.SSUtilizadores.ISSUtilizadores;
 import business.SSUtilizadores.SSUtilizadores;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.io.File;
@@ -131,7 +132,7 @@ public class GestHorariosFacade implements IGestHorariosLN{
      * @param codAluno Código de aluno cujo horário se quer consultar.
      * @return String Horário do aluno.
      */
-    public String consultarHorario(String codAluno) {
+    public Map<String, List<String>> consultarHorario(String codAluno) {
         return this.horarios.getHorarioAluno(codAluno);
     }
 

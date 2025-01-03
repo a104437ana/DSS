@@ -2,11 +2,10 @@ package ui;
 
 import business.GestHorariosFacade;
 import business.IGestHorariosLN;
+import business.SSHorarios.DiaSemana;
 
 
-import java.util.Scanner;
-import java.util.Set;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -115,12 +114,31 @@ public class TextUI {
      * Mostrar horário de aluno
      */
     private void printHorario(String user) {
-        String horario = this.model.consultarHorario(user);
-        if (horario == null) { // Verificar se tem turnos
+        Map<String, List<String>> horario = this.model.consultarHorario(user);
+        if (horario.isEmpty()) { // Verificar se tem turnos
             System.out.println("O aluno ainda não tem horário!");
             return;
         }
-        System.out.println(horario);
+        System.out.print("Horário do aluno ");
+        System.out.println(user);
+
+        List<String> dias = new ArrayList<>();
+        dias.add("Segunda-Feira");
+        dias.add("Terça-Feira");
+        dias.add("Quarta-Feira");
+        dias.add("Quinta-Feira");
+        dias.add("Sexta-Feira");
+
+        for(String dia : dias) {
+            System.out.print(dia);
+            System.out.println(":");
+            List<String> turnos = horario.get(dia);
+            if (turnos != null) {
+                for (String turno : turnos) {
+                    System.out.println(turno);
+                }
+            }
+        }
     }
 
 
@@ -352,13 +370,31 @@ public class TextUI {
             return;
         }
 
-        String horario = this.model.consultarHorario(codAluno);
-        if (horario == null) { // Verificar se tem turnos
+        Map<String,List<String>> horario = this.model.consultarHorario(codAluno);
+        if (horario.isEmpty()) { // Verificar se tem turnos
             System.out.println("O aluno ainda não tem horário!");
             return;
         }
+        System.out.print("Horário do aluno ");
+        System.out.println(codAluno);
 
-        System.out.println(horario);
+        List<String> dias = new ArrayList<>();
+        dias.add("Segunda-Feira");
+        dias.add("Terça-Feira");
+        dias.add("Quarta-Feira");
+        dias.add("Quinta-Feira");
+        dias.add("Sexta-Feira");
+
+        for(String dia : dias) {
+            System.out.print(dia);
+            System.out.println(":");
+            List<String> turnos = horario.get(dia);
+            if (turnos != null) {
+                for (String turno : turnos) {
+                    System.out.println(turno);
+                }
+            }
+        }
     }
 
     /**

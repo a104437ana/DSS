@@ -1,5 +1,6 @@
 package business;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,7 +62,7 @@ public interface IGestHorariosLN {
      * @param codAluno Código de aluno cujo horário se quer consultar.
      * @return String Horário do aluno.
      */
-    String consultarHorario(String codAluno);
+    Map<String, List<String>> consultarHorario(String codAluno);
 
     /**
      * Método de ínicio de sessão.

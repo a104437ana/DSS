@@ -3,6 +3,7 @@ package business.SSHorarios;
 import data.TurnoDAO;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Classe que representa um aluno no sistema.
@@ -178,15 +179,15 @@ public class Aluno {
      *
      * @return Map onde a chave é o Dia da Semana e o valor é uma lista de Turnos ordenados pela hora inicial.
      */
-    public Map<DiaSemana, List<Turno>> getHorario() {
+    public Map<String, List<String>> getHorario() {
         Map<String, List<Turno>> turnosPorUC = this.turnos.getByAluno(this.codAluno);
-        Map<DiaSemana, List<Turno>> horario = new HashMap<>();
+        Map<String, List<Turno>> horario = new HashMap<>();
 
         // Iterar por todos os turnos agrupados por UC
         for (List<Turno> turnos : turnosPorUC.values()) {
             for (Turno turno : turnos) {
                 // Adicionar o turno ao Map baseado no DiaSemana
-                horario.computeIfAbsent(turno.getDiaSemana(), k -> new ArrayList<>()).add(turno);
+                horario.computeIfAbsent(turno.getDiaSemana().toString(), k -> new ArrayList<>()).add(turno);
             }
         }
 
@@ -195,7 +196,24 @@ public class Aluno {
             Collections.sort(turnosDoDia);
         }
 
-        return horario;
+        Map<String,List<String>> h = new HashMap<>();
+
+        for (Map.Entry<String, List<Turno>> entry : horario.entrySet()) {
+            String key = entry.getKey();
+            List<Turno> turnos = entry.getValue();
+
+            // Converter a lista de Turno em uma lista de String
+            List<String> stringList = new ArrayList<>();
+            for (Turno turno : turnos) {
+                stringList.add(turno.toString());
+            }
+
+            // Colocar no novo mapa
+            h.put(key, stringList);
+        }
+
+
+        return h;
     }
 
     /**

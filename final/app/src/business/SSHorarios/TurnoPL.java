@@ -34,8 +34,9 @@ public class TurnoPL extends Turno{
      */
     @Override
     public String toString() {
-        return "TurnoPL{" + "idTurno='" + this.getIdTurno() + '\'' + ", diaSemana='" + this.getDiaSemana().toString() + '\'' +
-                ", horaInicial=" + this.getHoraInicial() + ", horaFinal=" + this.getHoraFinal() +
-                ", lotacao=" + this.getLotacao() + ", sala=" + this.getSala() + '}';
+        StringBuilder res = new StringBuilder();
+        res.append("    ").append(this.getHoraInicial()).append("-").append(this.getHoraFinal())
+                .append(" -> Turno ").append(this.getIdTurno()).append(" da UC '").append(this.getCodUC()).append("';");
+        return res.toString();
     }
 }

@@ -1,5 +1,6 @@
 package business.SSHorarios;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -68,7 +69,7 @@ public interface ISSHorarios {
      * @param codAluno Código do aluno.
      * @return String string com horário do aluno dado.
      */
-    String getHorarioAluno(String codAluno);
+    Map<String, List<String>> getHorarioAluno(String codAluno);
 
     /**
      * Método que preenche as tabelas das salas, ucs e turnos com dados pré-definidos.
