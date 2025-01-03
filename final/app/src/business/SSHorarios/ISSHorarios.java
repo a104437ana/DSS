@@ -40,7 +40,7 @@ public interface ISSHorarios {
      */
     void removerAlunoDoTurno(String codAluno, String codUC, String codTurno);
 
-    Map<String, Map<String, Set<Class<?>>>> gerarHorarios(int semestre);
+    Map<String, Map<String, Set<String>>> gerarHorarios(int semestre);
 
     /**
      * Importa alunos e suas inscrições a partir de um arquivo CSV combinado.

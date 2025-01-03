@@ -207,7 +207,28 @@ public class TextUI {
             System.out.println("Semestre inválido!");
             return;
         }
-        Map<String, Map<String, Set<Class<?>>>> alunosNaoAlocados = this.model.gerarHorarios(semestre);
+        Map<String, Map<String, Set<String>>> alunosNaoAlocados = this.model.gerarHorarios(semestre);
+        StringBuilder sb = new StringBuilder();
+        if (alunosNaoAlocados.size() > 0) {
+            sb.append("Alunos não alocados:");
+            for (Map.Entry<String, Map<String, Set<String>>> entrada : alunosNaoAlocados.entrySet()) {
+                String codAluno = entrada.getKey();
+                Map<String, Set<String>> ucsNaoAlocados = entrada.getValue();
+                sb.append("\nAluno ").append(codAluno).append(":");
+                for (Map.Entry<String, Set<String>> entradaUC : ucsNaoAlocados.entrySet()) {
+                    String codUC = entradaUC.getKey();
+                    Set<String> turnos = entradaUC.getValue();
+                    sb.append("\n\tUC ").append(codUC).append(":");
+                    for (String tipoTurno : turnos) {
+                        sb.append(" ").append(tipoTurno);
+                    }
+                }
+            }
+            System.out.println(sb.toString());
+        }
+        else {
+            System.out.println("Todos os alunos alocados com sucesso!");
+        }
     }
 
     /**

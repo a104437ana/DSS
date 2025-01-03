@@ -133,11 +133,11 @@ public class SSHorarios implements ISSHorarios {
     /**
      * Método que gera e aloca alunos a turnos automáticamente respeitando as restrições
      */
-    public Map<String, Map<String, Set<Class<?>>>> gerarHorarios(int semestre) {
+    public Map<String, Map<String, Set<String>>> gerarHorarios(int semestre) {
         Collection<UC> ucs = ucsDAO.getAllSemestre(semestre);
 
         Map<String, Aluno> alunos = alunosDAO.getAllAsMap();
-        Map<String, Map<String, Set<Class<?>>>> alunosNaoAlocados = new HashMap<>(); //codAluno -> codUC -> TiposTurnos
+        Map<String, Map<String, Set<String>>> alunosNaoAlocados = new HashMap<>(); //codAluno -> codUC -> TiposTurnos
 
         for (UC uc : ucs) { //faz a alocação uc a uc
             List<Turno> turnosUC = uc.getTurnos();
@@ -207,8 +207,8 @@ public class SSHorarios implements ISSHorarios {
                     if (!alocado && turnos.size() > 0) { //se não conseguiu alocar
                         alunosNaoAlocados.computeIfAbsent(codAluno, k -> new HashMap<>());
                         alunosNaoAlocados.get(codAluno).computeIfAbsent(codUC, k -> new TreeSet<>());
-                        Set<Class<?>> turnosNaoAlocado = alunosNaoAlocados.get(codAluno).get(codUC);
-                        turnosNaoAlocado.add(turnos.get(0).getClass());
+                        Set<String> turnosNaoAlocado = alunosNaoAlocados.get(codAluno).get(codUC);
+                        turnosNaoAlocado.add(turnos.get(0).getClass().getSimpleName());
                     }
                 }
             }

@@ -46,7 +46,7 @@ public interface IGestHorariosLN {
      * @param semestre  Semestre para o qual fazer a alocação
      * @return Map de codAluno para map de codUC para set do tipo de turno a que não está alocado
      */
-    Map<String, Map<String, Set<Class<?>>>> gerarHorarios(int semestre);
+    Map<String, Map<String, Set<String>>> gerarHorarios(int semestre);
 
     /**
      * Importa utilizadores, alunos e suas inscrições de dois arquivos CSV.

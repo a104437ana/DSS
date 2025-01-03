@@ -85,7 +85,7 @@ public class GestHorariosFacade implements IGestHorariosLN{
      * @param semestre  Semestre para o qual fazer a alocação
      * @return Map de codAluno para map de codUC para set do tipo de turno a que não está alocado
      */
-    public Map<String, Map<String, Set<Class<?>>>> gerarHorarios(int semestre) {
+    public Map<String, Map<String, Set<String>>> gerarHorarios(int semestre) {
         return this.horarios.gerarHorarios(semestre);
     }
 
