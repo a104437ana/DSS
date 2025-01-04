@@ -1,6 +1,10 @@
 package data;
 
-import business.SSHorarios.*;
+import business.SSHorarios.Turno;
+import business.SSHorarios.TurnoT;
+import business.SSHorarios.TurnoTP;
+import business.SSHorarios.TurnoPL;
+import business.SSHorarios.DiaSemana;
 
 import java.sql.*;
 import java.time.LocalTime;
