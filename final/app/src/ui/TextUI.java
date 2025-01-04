@@ -173,7 +173,10 @@ public class TextUI {
                 "Importar Alunos"
         });
 
-        menu.setHandler(1, ()->this.model.inicializacaoSalasUCsTurnos());
+        menu.setHandler(1, ()->{
+            this.model.inicializacaoSalasUCsTurnos();
+            System.out.println("As salas, UCs e turnos foram inseridos no sistema com sucesso.");
+        });
         menu.setHandler(2, this::importarAlunos);
 
         menu.run();
