@@ -72,13 +72,16 @@ public class SSUtilizadores implements ISSUtilizadores {
      * @return String com id do utilizador autenticado ou null se credenciais estão inválidas
      */
 
-    public String iniciarSessao(String codUtilizador, String senha){
+    public boolean iniciarSessao(String codUtilizador, String senha){
+        boolean b = false;
         Utilizador u = this.utilizadoresDAO.get(codUtilizador);
-        if (u!=null && (u.getSenha().equals(senha))) {
-            System.out.println("'" + codUtilizador + "' logado com sucesso!");
-            return codUtilizador;
-        } else {
-            return null;
+        if (u!=null) {
+            String senhaU = u.getSenha();
+            boolean senhaIgual = senhaU.equals(senha);
+            if (senhaIgual) {
+                b = true;
+            }
         }
+        return b;
     }
 }

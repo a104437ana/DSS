@@ -144,7 +144,7 @@ public class GestHorariosFacade implements IGestHorariosLN{
      *
      * @return String com id do utilizador autenticado ou null se credenciais estão inválidas
      */
-    public String iniciarSessao(String id, String senha) {
+    public boolean iniciarSessao(String id, String senha) {
         return this.utilizadores.iniciarSessao(id, senha);
     }
 

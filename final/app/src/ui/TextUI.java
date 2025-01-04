@@ -55,15 +55,14 @@ public class TextUI {
         System.out.println("Insira senha de utilizador: ");
         String senha = scin.nextLine();
 
-        String user = this.model.iniciarSessao(cod, senha);
-        if (user == null) {
+        boolean iniciarSessao = this.model.iniciarSessao(cod, senha);
+        if (iniciarSessao == false) {
             System.out.println("Credenciais inválidas!");
-        } else if (user.equals("admin")) {
-            this.menuPrincipalAdmin(user);
         } else {
-            this.menuPrincipalAluno(user);
+            System.out.println("'" + cod + "' logado com sucesso!");
+            if (cod.toLowerCase().equals("admin")) this.menuPrincipalAdmin(cod);
+            else this.menuPrincipalAluno(cod);
         }
-
     }
 
     /**

@@ -19,5 +19,5 @@ public interface ISSUtilizadores {
      *
      * @return String com id do utilizador autenticado ou null se credenciais estão inválidas
      */
-    String iniciarSessao(String codUtilizador, String senha);
+    boolean iniciarSessao(String codUtilizador, String senha);
 }
