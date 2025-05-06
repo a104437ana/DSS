@@ -25,3 +25,6 @@ git clone https://github.com/LEI-DSS/DSS2425-Grupo-03.git
 ```bash
 git clone git@github.com:LEI-DSS/DSS2425-Grupo-03.git
 ```
+## Avaliação
+
+### Nota final: 18/20 ✅
